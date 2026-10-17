@@ -46,3 +46,5 @@
 - [AUC：边界与分数方向](auc-ranking.md) · [HTML](auc-ranking.html)
 
 后续教学继续提供 SVG、Markdown、HTML，并同步到本仓库。练习回答后再更新掌握状态。
+
+- [AUC、阈值与概率](auc-threshold.md) · [HTML 图解](auc-threshold.html)（2026-10-18）
