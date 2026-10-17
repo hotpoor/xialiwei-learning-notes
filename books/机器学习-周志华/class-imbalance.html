@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>类别不平衡 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>类别不平衡：为什么还要看查准率与 P-R 曲线</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：已讲解，练习待回答</li>
+<li>状态：练习已答对（2026-10-18）</li>
 <li><a href="auc-threshold.md">上一节：AUC 与阈值</a> · <a href="class-imbalance.html">HTML 图解版</a></li>
 </ul>
 <h2>1. 同样的 TPR 与 FPR，不同的查准率</h2>
@@ -51,11 +51,69 @@
 <pre><code class="language-text">Precision = (t × p) / (t × p + f × (1 - p))
 </code></pre>
 <p>不必背公式：分子是找到的正类比例，分母是所有报出样本的比例。</p>
-<h2>4. 练习（待回答）</h2>
+<h2>4. 练习（已答对）</h2>
 <p>有 10 个坏瓜、990 个好瓜。假设改进后的模型仍能找出 9 个坏瓜，但只误报 9 个好瓜。</p>
 <ol>
 <li>查全率是多少？</li>
 <li>查准率是多少？</li>
 <li>假正例率是多少？</li>
 </ol>
-<p>注意：查准率的分母是所有报出的瓜，假正例率的分母是实际好瓜。</p></main></html>
+<p>注意：查准率的分母是所有报出的瓜，假正例率的分母是实际好瓜。</p>
+<h3>学习者回答</h3>
+<ul>
+<li>查全率：9 / 10 = 90%。</li>
+<li>查准率：9 / (9 + 9) = 50%。</li>
+<li>假正例率：9 / 990 ≈ 0.91%。</li>
+</ul>
+<p>反馈：全部正确，三个指标的分母都区分清楚了。</p>
+<h2>5. 改进前后对照</h2>
+<p><figure aria-label="同一批数据上改进前后的指标与人工复查数量"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="640" viewBox="0 0 1080 640"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="640" fill="#f3f6fb"/><text x="45" y="60" class="h">找到的坏瓜一样多，复查工作却大幅减少</text><text x="45" y="103" class="t">同一批：10 个坏瓜 + 990 个好瓜｜报出的瓜全部交给人工复查</text><rect x="40" y="135" width="1000" height="315" rx="16" fill="white"/><text x="65" y="180" class="t">改进前：108 个待复查</text><rect x="65" y="205" width="75" height="54" rx="4" fill="#37aa86"/><rect x="140" y="205" width="825" height="54" rx="4" fill="#f5ba79"/><text x="80" y="242" class="sm">9 坏</text><text x="450" y="242" class="t">99 个误报好瓜</text><text x="65" y="310" class="t">改进后：18 个待复查</text><rect x="65" y="335" width="75" height="54" rx="4" fill="#37aa86"/><rect x="140" y="335" width="75" height="54" rx="4" fill="#f5ba79"/><text x="80" y="372" class="sm">9 坏</text><text x="155" y="372" class="sm">9 好</text><text x="250" y="372" class="t">两条长度使用相同比例</text><text x="65" y="427" class="sm">绿色：找到的坏瓜　橙色：误报的好瓜　两种方案都仍漏掉 1 个坏瓜</text><rect x="40" y="475" width="1000" height="125" rx="16" fill="#e0f2eb"/><text x="65" y="520" class="h">查全率：90% → 90%　查准率：约 8.3% → 50%</text><text x="65" y="565" class="t">复查数量减少约 83.3%，但查全率并没有提高。</text></svg></figure></p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>改进前</th>
+<th>改进后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>找到的坏瓜 TP</td>
+<td>9</td>
+<td>9</td>
+</tr>
+<tr>
+<td>漏掉的坏瓜 FN</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>误报的好瓜 FP</td>
+<td>99</td>
+<td>9</td>
+</tr>
+<tr>
+<td>报出总数（假设全部交给人工复查）</td>
+<td>108</td>
+<td>18</td>
+</tr>
+<tr>
+<td>查全率</td>
+<td>90%</td>
+<td>90%</td>
+</tr>
+<tr>
+<td>查准率</td>
+<td>约 8.3%</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>假正例率</td>
+<td>10%</td>
+<td>约 0.91%</td>
+</tr>
+</tbody>
+</table>
+<p>在这批数据上，同样找到 9 个坏瓜，人工复查数量从 108 降至 18，减少约 83.3%。没有证明新模型在所有数据或阈值下都更好，也不能只凭这两个工作点比较整体 AUC。</p>
+<h3>下一问（待回答）</h3>
+<p>如果每天最多能人工复查 20 个瓜，而商家要求至少找到 95% 的坏瓜，改进后这组结果是否同时满足两个要求？分别判断复查数量与查全率。</p></main></html>
