@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROC 与 AUC · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>AUC、阈值与概率：三个不同的问题</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：练习已答对（2026-10-18）</li>
+<li>状态：练习在 GPT 辅助下完成，待独立复测</li>
 <li><a href="auc-ranking.md">上一节</a> · <a href="auc-threshold.html">HTML 图解版</a></li>
 </ul>
 <h2>1. 相同 AUC，不同预测结果</h2>
@@ -52,4 +52,7 @@
 <li>AUC 是该 ROC 曲线下的面积，用一个数概括整体排序能力。</li>
 <li>它们不直接决定模型能否使用。选择还需结合漏检、误报代价，目标查全率和复查能力等约束。</li>
 <li>AUC 高不等于任意阈值下都好，也不等于概率准确；满足真实任务要求才是评价的目的。</li>
-</ul></main></html>
+</ul>
+<h2>学习状态更正 · 2026-10-18</h2>
+<p>学习者说明：前面的计算题由 GPT 辅助回答，独立计算尚不熟练；ROC/AUC 目前主要理解为评估工具；MSE/RMSE 目前主要理解为越小越好；MAE 的用途仍需从直觉重讲。</p>
+<p>因此，前面的正确答案仅记录“辅助下完成”，不作为独立掌握的证据。后续先练含义、分母、单位，再练简单计算；独立复测前不标记已掌握。</p></main></html>

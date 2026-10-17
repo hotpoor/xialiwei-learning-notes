@@ -58,3 +58,19 @@
 - [补充应用：高估与低估代价不同](asymmetric-cost.md) · [HTML](asymmetric-cost.html)（2026-10-18）
 
 - [评估稳定性与交叉验证](cross-validation.md) · [HTML](cross-validation.html)（2026-10-18）
+
+## 阶段复习包
+
+[知识总览](review/README.md) · [30 张知识卡](review/cards.md) · [40 道题库](review/questions.md) · [答案解析](review/answers.md) · [离线复习页面](review/index.html)
+
+## 学习状态更正 · 2026-10-18
+
+学习者说明：前面的计算题由 GPT 辅助回答，独立计算尚不熟练；ROC/AUC 目前主要理解为评估工具；MSE/RMSE 目前主要理解为越小越好；MAE 的用途仍需从直觉重讲。
+
+因此，前面的正确答案仅记录“辅助下完成”，不作为独立掌握的证据。后续先练含义、分母、单位，再练简单计算；独立复测前不标记已掌握。
+
+## 学习方式约定 · 2026-10-18
+
+以理解与正确运用为主：能说清指标用途、适用条件，能选择评价方案，能检查 AI/代码的输入输出。手算少做且可选，计算题附公式或代入提示，不要求背公式或追求速度。不能把历史 GPT 辅助答案当作独立计算能力的证据，但手算熟练度也不作为理解与应用能力的唯一标准。
+
+[理解与运用起步引导](review/starter.md) · [离线复习页](review/index.html#starter)

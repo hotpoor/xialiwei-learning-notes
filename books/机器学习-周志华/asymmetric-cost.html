@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>非对称代价 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>补充应用：高估与低估代价不同</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：练习已答对（2026-10-18）</li>
+<li>状态：练习在 GPT 辅助下完成，待独立复测</li>
 <li>这是性能度量的应用补充，不代表原书新增章节。</li>
 <li><a href="mae-vs-mse.md">上一节：MAE 与 MSE</a> · <a href="asymmetric-cost.html">HTML 图解版</a></li>
 </ul>
@@ -81,4 +81,7 @@
 <h3>衔接：评估结果是否稳定（待讨论）</h3>
 <p>同一任务中，模型 A、B 在某次留出的测试数据上准确率分别为 91%、90%。仅凭这一次结果，能否断定 A 在未来数据上一定更好？后续返回第二章的评估方法与比较检验。</p>
 <h3>评估稳定性：学习者回答（2026-10-18）</h3>
-<p>不能，可能只是这次测试数据的偶然差异，需要更多样本或者多次评估，才能判断 A 是不是更好。反馈：正确；应在合理的验证流程中评估不确定性，不应反复利用最终测试集调整方案。</p></main></html>
+<p>不能，可能只是这次测试数据的偶然差异，需要更多样本或者多次评估，才能判断 A 是不是更好。反馈：正确；应在合理的验证流程中评估不确定性，不应反复利用最终测试集调整方案。</p>
+<h2>学习状态更正 · 2026-10-18</h2>
+<p>学习者说明：前面的计算题由 GPT 辅助回答，独立计算尚不熟练；ROC/AUC 目前主要理解为评估工具；MSE/RMSE 目前主要理解为越小越好；MAE 的用途仍需从直觉重讲。</p>
+<p>因此，前面的正确答案仅记录“辅助下完成”，不作为独立掌握的证据。后续先练含义、分母、单位，再练简单计算；独立复测前不标记已掌握。</p></main></html>

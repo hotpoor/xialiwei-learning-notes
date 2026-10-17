@@ -1,0 +1,280 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西瓜书 · 阶段复习卡与题库</title><style>*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:#20304b;font:16px/1.75 system-ui,"PingFang SC",sans-serif}header{background:#153e37;color:#fff;padding:38px max(22px,calc((100vw - 1120px)/2));}header h1{margin:0;font-size:30px}header p{margin:10px 0 0;color:#d0e6df}main{max-width:1164px;margin:auto;padding:24px 22px 64px}nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}button,select,input,textarea{font:inherit}button,select,input{border:1px solid #cbd6df;border-radius:9px;background:white;color:#20304b;padding:9px 13px}button{cursor:pointer}button:hover{background:#e4f2ec}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #d28a2e;outline-offset:3px}nav button[aria-selected=true]{background:#126c58;color:white;border-color:#126c58}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.toolbar input{flex:1;min-width:180px}.panel{background:white;padding:26px;border:1px solid #e1e7ee;border-radius:16px}section[hidden]{display:none}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3f7;padding:16px;border-radius:10px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card,.question{background:white;border:1px solid #dce4eb;border-radius:14px;padding:22px;margin-bottom:16px}.card{margin:0}.tag{font-size:13px;color:#536c66;background:#e7f3ed;border-radius:20px;padding:4px 10px;display:inline-block}.question h3,.card h3{font-size:19px;line-height:1.6}details{margin-top:14px;border-top:1px solid #e4e9ee;padding-top:12px}summary{cursor:pointer;color:#126c58;font-weight:600}.pit{background:#fff4e4;border-radius:9px;padding:12px}.small{font-size:14px;color:#607084}textarea{width:100%;min-height:100px;resize:vertical;border:1px solid #bdcbd7;border-radius:9px;padding:12px;background:#fafcff}.marks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}.marks button[aria-pressed=true]{background:#153e37;color:white}a{color:#096957}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px 13px;text-align:left}th{background:#edf3f7}svg{display:block;width:100%;height:auto}#progress{background:#e3f1eb;border-radius:10px;padding:12px 16px;margin-bottom:18px}h2{margin-top:30px}#toast{min-height:25px}body.print-questions .marks,body.print-questions .toolbar{display:none}@media(max-width:720px){.grid{grid-template-columns:1fr}.panel{padding:16px}header h1{font-size:25px}main{padding:18px 12px}.question,.card{padding:17px}}@media print{header{background:white;color:black;padding:0}header p{color:black}nav,.toolbar,#progress,#toast,.marks,.print-help{display:none}main{padding:0}.panel,.card,.question{border-color:#ccc}.question,.card{break-inside:avoid}.grid{display:block}.card{margin-bottom:15px}textarea{min-height:90px}a{color:black}details:not([open])>*:not(summary){display:none}}</style></head><body><header><h1>西瓜书 · 阶段复习</h1><p>8 道起步含义题 · 30 张知识卡 · 40 道储备练习 · SVG 知识地图｜2026-10-18</p></header><main><nav aria-label="复习内容"><button data-tab="starter">从直觉开始</button><button data-tab="overview">知识总览</button><button data-tab="cards">知识卡片</button><button data-tab="quiz">独立做题</button><button data-tab="answers">答案解析</button></nav><div id="progress" aria-live="polite"></div><div id="toast" class="small" role="status"></div><section id="starter" class="panel"><h1>从直觉到运用：让工具算，自己判断</h1>
+<p>整理日期：2026-10-18。<a href="#overview">复习总览</a> · <a href="index.html#starter">离线引导页</a></p>
+<h2>学习状态更正 · 2026-10-18</h2>
+<p>学习者说明：前面的计算题由 GPT 辅助回答，独立计算尚不熟练；ROC/AUC 目前主要理解为评估工具；MSE/RMSE 目前主要理解为越小越好；MAE 的用途仍需从直觉重讲。</p>
+<p>因此，前面的正确答案仅记录“辅助下完成”，不作为独立掌握的证据。后续先练含义、分母、单位，再练简单计算；独立复测前不标记已掌握。</p>
+<h2>学习方式约定 · 2026-10-18</h2>
+<p>以理解与正确运用为主：能说清指标用途、适用条件，能选择评价方案，能检查 AI/代码的输入输出。手算少做且可选，计算题附公式或代入提示，不要求背公式或追求速度。不能把历史 GPT 辅助答案当作独立计算能力的证据，但手算熟练度也不作为理解与应用能力的唯一标准。</p>
+<h2>先看 MAE 在工作中有什么用</h2>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="830" viewBox="0 0 1080 830"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:23px}.s{font-size:20px}</style><rect width="1080" height="830" fill="#f3f6fb"/><text x="40" y="55" class="h">先不背公式：MAE 在问“平均每次偏差多少？”</text><text x="40" y="101" class="t">两个瓜实际都重 5 kg，模型分别预测 4 kg、6 kg。</text><rect x="40" y="135" width="1000" height="230" rx="16" fill="white"/><text x="65" y="185" class="h">第一个瓜：少猜 1 kg</text><text x="575" y="185" class="h">第二个瓜：多猜 1 kg</text><path d="M140 245H440 M650 245H950" stroke="#c0cbd8" stroke-width="5"/><circle cx="140" cy="245" r="10" fill="#2870ba"/><circle cx="290" cy="245" r="10" fill="#087d69"/><circle cx="800" cy="245" r="10" fill="#087d69"/><circle cx="950" cy="245" r="10" fill="#2870ba"/><text x="115" y="290" class="s">预测4</text><text x="264" y="290" class="s">实际5</text><text x="774" y="290" class="s">实际5</text><text x="924" y="290" class="s">预测6</text><text x="65" y="337" class="t">偏差距离：1 kg</text><text x="575" y="337" class="t">偏差距离：1 kg</text><rect x="40" y="390" width="1000" height="155" rx="16" fill="#e0f2eb"/><text x="65" y="435" class="h">MAE = 这些偏差距离的平均值 = 1 kg</text><text x="65" y="482" class="t">含义：在这两个瓜上，每次预测平均偏差 1 kg。</text><text x="65" y="520" class="s">只看距离大小，不让“多猜”和“少猜”相互抵消。</text><rect x="40" y="570" width="1000" height="210" rx="16" fill="white"/><text x="65" y="615" class="h">MAE 有什么用？</text><text x="65" y="660" class="t">同一批瓜：甲的 MAE 1 kg，乙的 MAE 0.2 kg。</text><text x="65" y="705" class="t">若只比较平均偏差距离，乙更准，离实际重量更近。</text><text x="65" y="750" class="s">MAE 不告诉你总是高估还是低估，也不保证每个瓜都只差这个数。</text></svg></p>
+<p>MAE 是“平均绝对误差”。先把它理解成一句话：<strong>在这批数据上，每次预测平均离真实值多远。</strong></p>
+<p>“绝对”只是在说：少猜 1 kg 和多猜 1 kg，偏差距离都是 1 kg，不让它们互相抵消。</p>
+<p>用途：在同一批数据、同一种单位下比较模型的平均偏差大小。MAE = 0.2 kg，比 MAE = 1 kg 的平均偏差更小。它不保证每次只差 0.2 kg，也不告诉你偏差方向。</p>
+<p>MSE、RMSE 与 AUC 的计算稍后再回到，不要求今天一起掌握。</p>
+<h2>8 道含义与判断题：一次一道</h2>
+<p>下面是新增的 8 道起步题，均待独立回答。无需现在全部完成。</p>
+<h3>S01 · 含义</h3>
+<p>同一批瓜：甲 MAE=1 kg，乙 MAE=0.2 kg。只比较平均偏差距离，谁更准？用自己的话解释，不用计算。</p>
+<h3>S02 · 方向</h3>
+<p>一个瓜少猜 1 kg，另一个多猜 1 kg。它们是不是都猜准了？两个方向能否把实际偏差“抵消掉”？</p>
+<h3>S03 · 单个与平均</h3>
+<p>MAE=1 kg，是否意味着每个瓜都恰好差 1 kg？</p>
+<h3>S04 · 单位</h3>
+<p>预测的是重量，原单位是 kg。MAE 的单位是 kg 还是 kg²？</p>
+<h3>S05 · 指标用途</h3>
+<p>查准率在问“报出的准不准”，还是“实际坏瓜找全没”？</p>
+<h3>S06 · 分母</h3>
+<p>先不算数：查全率的分母应该是“所有实际坏瓜”，还是“所有报出的疑似坏瓜”？</p>
+<h3>S07 · 排序</h3>
+<p>AUC 主要看“坏瓜是否排在好瓜前面”，还是看“每个概率是否可信”？</p>
+<h3>S08 · 数据边界</h3>
+<p>训练集、验证集、测试集，分别谁负责学习、选择、最终评估？</p>
+<h2>起步题解析（先作答再看）</h2>
+<details>
+<summary>展开 S01～S08 的参考答案</summary>
+
+- S01：乙，平均离真实重量更近；不是说每个瓜都更准。
+- S02：都没猜准；方向相反不会消除已经发生的偏差距离。
+- S03：不是，它是多个偏差距离的平均。
+- S04：kg，与目标单位相同。
+- S05：报出的准不准。实际坏瓜找全没是查全率。
+- S06：所有实际坏瓜。
+- S07：排序；概率是否可信属于校准问题。
+- S08：训练学习、验证选择、测试最终评估。
+
+</details>
+
+<h2>后续走法</h2>
+<ol>
+<li>先用 S01～S08 检查含义，每次只答一道，不限速度。</li>
+<li>优先做题库 Q31～Q40 应用题与 Q21～Q30 辨析题，回答理由即可。</li>
+<li>需要数值时让 AI/代码计算，对照公式提示核对输入、分母、单位与范围。Q11～Q20 手算为可选。</li>
+<li>ROC/AUC 先理解图的坐标、排序与阈值；知道计算依据即可，不要求熟练手算面积。</li>
+</ol>
+<p>40题库是材料储备，不是当前必须完成的考试，也不依据GPT辅助的历史答案推断独立能力。</p>
+<h2>用 AI 或代码算指标时，自己负责这 6 个检查</h2>
+<table>
+<thead>
+<tr>
+<th>检查</th>
+<th>要问什么</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务目标</td>
+<td>要预测什么，错误代价是什么？</td>
+<td>漏检昂贵时关注查全，同时看复查容量</td>
+</tr>
+<tr>
+<td>数据边界</td>
+<td>这是验证还是最终测试？是否泄漏？</td>
+<td>预处理只从本轮训练数据拟合</td>
+</tr>
+<tr>
+<td>输入含义</td>
+<td>正类是谁，分数越高代表谁？</td>
+<td>计算坏瓜 ROC-AUC，应提供朝向坏瓜的分数，不只提供0/1预测</td>
+</tr>
+<tr>
+<td>指标含义</td>
+<td>分母、单位、范围是否合理？</td>
+<td>查全率0～1；MAE单位kg；MSE单位kg²</td>
+</tr>
+<tr>
+<td>场景适配</td>
+<td>类别比例、对象、时间与部署是否相符？</td>
+<td>新病人按病人分组，未来销量按时间评估</td>
+</tr>
+<tr>
+<td>决策约束</td>
+<td>这个数字够不够支持使用？</td>
+<td>AUC高不保证查全率≥95%或复查数≤20</td>
+</tr>
+</tbody>
+</table>
+<p>MAE不是“数学考试分数”：若系统要预测到货重量，MAE可帮助你知道平均偏差大约多少kg，并与可接受误差比较。若有方向不同的代价或严格单次误差上限，不能只看MAE。</p>
+<h3>可复用的计算请求模板</h3>
+<pre><code class="language-text">请基于我提供的真实标记与预测结果计算指标，不编造数据。
+任务目标：[填写]；正类：[填写]；分数越高代表：[填写]。
+数据用途：[验证/最终测试]；划分方式：[对象/时间/其他]。
+请说明每个指标的含义、公式、样本数、分母和单位，
+检查真实标记与预测逐条对应、是否缺失/重复、是否只含一个类别。
+若计算ROC-AUC，请使用方向正确的预测分数，说明同分与未定义情况。
+最后结合错误代价及约束：[填写]，解释可做什么决策、还缺什么信息。
+</code></pre></section><section id="overview" class="panel"><h1>阶段复习包：基础概念与模型评估</h1>
+<p>整理日期：2026-10-18。范围仅为当前对话学过的内容，不能代表第一、二章已经全部完成。本文为自己的教学梳理，不复制原书正文。</p>
+<p><a href="#starter">从直觉开始（推荐）</a> · <a href="index.html#starter">打开离线复习页面</a> · <a href="#cards">30 张知识卡</a> · <a href="#quiz">40 道题库</a> · <a href="#answers">答案解析</a> · <a href="../README.md">返回阅读记录</a></p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="840" viewBox="0 0 1080 840"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.s{font-size:19px}</style><rect width="1080" height="840" fill="#f3f6fb"/><text x="40" y="55" class="h">西瓜书 · 当前知识地图</text><text x="40" y="95" class="t">从“学什么”到“怎么验证”，围绕真实任务判断模型</text><rect x="40" y="130" width="475" height="185" rx="16" fill="white"/><text x="62" y="175" class="h">01 学习的目标</text><text x="62" y="225" class="t">数据 → 学习算法 → 模型</text><text x="62" y="270" class="s">泛化 · 过拟合 · 假设与偏好</text><rect x="565" y="130" width="475" height="185" rx="16" fill="white"/><text x="587" y="175" class="h">02 公平的评估</text><text x="587" y="225" class="t">训练学 · 验证选 · 测试评估</text><text x="587" y="270" class="s">预处理边界 · 对象分组 · 时间顺序</text><rect x="40" y="345" width="475" height="185" rx="16" fill="white"/><text x="62" y="390" class="h">03 分类如何打分</text><text x="62" y="440" class="t">混淆矩阵 → P / R / FPR / F1</text><text x="62" y="485" class="s">阈值 · ROC / P-R · AUC · 类别比例</text><rect x="565" y="345" width="475" height="185" rx="16" fill="white"/><text x="587" y="390" class="h">04 回归如何打分</text><text x="587" y="440" class="t">MAE · MSE · RMSE</text><text x="587" y="485" class="s">单位 · 大误差 · 对称与非对称成本</text><rect x="40" y="560" width="475" height="185" rx="16" fill="white"/><text x="62" y="605" class="h">05 结果有多可靠</text><text x="62" y="655" class="t">一次领先 ≠ 未来保证领先</text><text x="62" y="700" class="s">5 折交叉验证：刚讲解，待独立作答</text><rect x="565" y="560" width="475" height="185" rx="16" fill="white"/><text x="587" y="605" class="h">06 复习的闭环</text><text x="587" y="655" class="t">看卡回忆 → 独立做题 → 查解析</text><text x="587" y="700" class="s">错题回到知识卡 → 再做变式题</text><text x="40" y="800" class="s">历史计算有 GPT 辅助，独立能力待复测；先理解含义，再练计算。</text></svg></p>
+<h2>学习状态更正 · 2026-10-18</h2>
+<p>学习者说明：前面的计算题由 GPT 辅助回答，独立计算尚不熟练；ROC/AUC 目前主要理解为评估工具；MSE/RMSE 目前主要理解为越小越好；MAE 的用途仍需从直觉重讲。</p>
+<p>因此，前面的正确答案仅记录“辅助下完成”，不作为独立掌握的证据。后续先练含义、分母、单位，再练简单计算；独立判断前不标记已掌握；计算可借助工具，重点核验含义与运用。</p>
+<h2>1. 当前进度（以下为讲解与辅助作答记录，不代表独立掌握）</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>已学习内容</th>
+<th>当前状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学习基础</td>
+<td>样本、特征、标记；分类/回归/聚类；泛化；过拟合；假设空间、版本空间、归纳偏好</td>
+<td>已讲解，辅助问答记录；不表示第一章全学完</td>
+</tr>
+<tr>
+<td>数据划分</td>
+<td>训练/验证/测试；预处理泄漏；按对象划分；时间顺序与年度周期</td>
+<td>已讲解；曾混淆验证与测试，后续已答对</td>
+</tr>
+<tr>
+<td>分类指标</td>
+<td>混淆矩阵、准确率、P、R、FPR、F1、阈值</td>
+<td>已有辅助计算答案，待独立练习</td>
+</tr>
+<tr>
+<td>曲线与排序</td>
+<td>ROC、P-R、AUC面积与配对、分数方向、校准的区别</td>
+<td>主要概念已讲解，计算有GPT辅助，需重练</td>
+</tr>
+<tr>
+<td>类别不平衡</td>
+<td>正类比例、误报数、查准率、复查容量与查全率约束</td>
+<td>有辅助作答记录，待独立复测</td>
+</tr>
+<tr>
+<td>回归与成本</td>
+<td>MSE、RMSE、MAE、线性及方向不同的成本</td>
+<td>MSE/RMSE目前理解为越小越好，MAE用途需重讲</td>
+</tr>
+<tr>
+<td>交叉验证</td>
+<td>5折运行方式、每折预处理、最终测试边界</td>
+<td>刚讲解，原练习尚未回答；本题库Q38～Q40重点巩固</td>
+</tr>
+</tbody>
+</table>
+<p>尚未系统展开：正式比较检验、偏差与方差、自助法等；不将其列为已掌握。</p>
+<h2>2. 一页核心公式</h2>
+<p>约定坏瓜为正类，分数越高越像坏瓜，预测误差 e = 预测值 − 实际值。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式/含义</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td>(TP + TN) / N</td>
+<td>类别不平衡时可能误导</td>
+</tr>
+<tr>
+<td>Precision 查准率</td>
+<td>TP / (TP + FP)</td>
+<td>分母是报出的正类</td>
+</tr>
+<tr>
+<td>Recall = TPR 查全率</td>
+<td>TP / (TP + FN)</td>
+<td>分母是实际正类</td>
+</tr>
+<tr>
+<td>FPR 假正例率</td>
+<td>FP / (FP + TN)</td>
+<td>分母是实际负类</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>2PR / (P + R)</td>
+<td>P、R的调和平均；不能替代业务约束</td>
+</tr>
+<tr>
+<td>ROC-AUC</td>
+<td>Σ ΔFPR × 相邻TPR的平均</td>
+<td>正负配对胜率，同分计半</td>
+</tr>
+<tr>
+<td>AUC配对法</td>
+<td>(排对数 + 0.5×同分数) / (正类数×负类数)</td>
+<td>需同时有正类和负类</td>
+</tr>
+<tr>
+<td>MAE</td>
+<td>平均绝对误差</td>
+<td>原单位，例如 kg</td>
+</tr>
+<tr>
+<td>MSE</td>
+<td>平均平方误差</td>
+<td>平方单位，例如 kg²</td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td>√MSE</td>
+<td>原单位；同一数据上与MSE排序相同</td>
+</tr>
+</tbody>
+</table>
+<p>比率公式需分母非零；未定义时先说明原因，不机械填0。上述F1表达式在P+R为0时需约定处理方式。</p>
+<h2>3. 最容易混淆的 8 组区别</h2>
+<ol>
+<li>学习算法是方法，模型是结果。</li>
+<li>训练全对不保证泛化好；测试集帮助评估，不自动阻止过拟合。</li>
+<li>训练负责学习，验证负责选择，测试负责最终评估。</li>
+<li>查准的分母是报出者，查全的分母是实际目标，FPR的分母是实际非目标。</li>
+<li>ROC看误报比例与查全；P-R看查全与查准。</li>
+<li>AUC看排序；阈值看报出哪些；校准看概率可信度。</li>
+<li>MAE线性看误差大小；MSE更重罚大误差；实际成本可能还区分方向。</li>
+<li>交叉验证每轮重新训练，验证折不参与本轮预处理拟合；最终测试集保留。</li>
+</ol>
+<h2>学习方式约定 · 2026-10-18</h2>
+<p>以理解与正确运用为主：能说清指标用途、适用条件，能选择评价方案，能检查 AI/代码的输入输出。手算少做且可选，计算题附公式或代入提示，不要求背公式或追求速度。不能把历史 GPT 辅助答案当作独立计算能力的证据，但手算熟练度也不作为理解与应用能力的唯一标准。</p>
+<h2>4. 建议怎么复习</h2>
+<p><strong>先从<a href="#starter">起步引导</a>的S01开始，一次一道含义题，不要求先做计算。以下40题计划仅作后续参考。</strong></p>
+<ul>
+<li>第一次：先看地图，逐张回忆C01～C30，先说答案再展开。</li>
+<li>优先Q31～Q40：应用与交叉验证，重点说出选择与理由。</li>
+<li>再做Q21～Q30：识别误区，不必追求计算速度。</li>
+<li>Q01～Q10：概念回忆，可随时查卡片。</li>
+<li>Q11～Q20：可选计算，附公式与代入提示，可用AI/代码代算，再检查单位、范围和含义。</li>
+<li>每题对照解析，自评“答对/待复习”；错题按题末知识卡编号回看。答对且能解释理由再标记。</li>
+<li>明天及几天后可重做错题与变式题；这是复习建议，没有创建定时任务。</li>
+</ul>
+<p>HTML 的自评记录保存在当前浏览器本地，不自动同步回 GitHub；你在聊天中给出的答案会继续由我更新到仓库。可导出进度备份。</p>
+<h2>5. 原图解入口</h2>
+<ul>
+<li><a href="../roc-auc.html">ROC 与 AUC计算</a></li>
+<li><a href="../auc-ranking.html">AUC边界与方向</a></li>
+<li><a href="../auc-threshold.html">AUC与阈值</a></li>
+<li><a href="../class-imbalance.html">类别不平衡</a></li>
+<li><a href="../regression-mse.html">MSE与RMSE</a></li>
+<li><a href="../mae-vs-mse.html">MAE与MSE</a></li>
+<li><a href="../asymmetric-cost.html">高估低估成本</a></li>
+<li><a href="../cross-validation.html">交叉验证</a></li>
+</ul></section><section id="cards" hidden><p>先回忆，再展开。可将不熟悉的卡片标为“待复习”。</p><div class="toolbar"><input id="card-search" aria-label="搜索知识卡" placeholder="搜索概念、公式或易错点"><select id="card-topic" aria-label="卡片主题"></select><select id="card-state" aria-label="卡片掌握状态"><option value="all">全部状态</option><option value="review">待复习</option><option value="known">已理解</option><option value="new">未标记</option></select><button id="card-shuffle">随机顺序</button></div><div id="card-list" class="grid"></div></section><section id="quiz" hidden><p>优先做应用与辨析。计算题可选、附公式，可用AI/代码辅助；重点写清判断与理由，不会自动判分。</p><div class="toolbar"><input id="question-search" aria-label="搜索题目" placeholder="搜索题号或题目"><select id="question-level" aria-label="题目难度"><option value="all">全部题组</option><option>基础</option><option value="计算">计算（可选，公式辅助）</option><option>辨析</option><option selected>应用</option></select><select id="question-state" aria-label="题目状态"><option value="all">全部状态</option><option value="review">待复习</option><option value="correct">答对</option><option value="new">未标记</option></select><button id="question-shuffle">随机顺序</button><button id="print-quiz">打印当前题组</button></div><div id="question-list"></div></section><section id="answers" hidden class="panel"><p>建议完成一组后再对照。每题答案默认折叠。</p><div id="answer-list"></div></section><footer class="panel" style="margin-top:26px"><strong>复习进度</strong><p class="small">自评与输入仅保存在当前浏览器本地；不会自动提交到 GitHub。换浏览器、清理数据可能丢失，请导出备份。历史计算由 GPT 辅助完成，尚不作为独立掌握；交叉验证练习也待独立作答。</p><div class="toolbar"><button id="export">导出进度</button><button id="reset">清空本地进度</button></div></footer></main><script id="study-data" type="application/json">{"cards": [{"id": "C01", "topic": "基础概念", "q": "机器学习在学什么？", "a": "从经验数据中学习模型，用于对新情况作判断。学习算法是学习的方法，模型是学出的结果。", "pit": "模型不是学习算法本身。"}, {"id": "C02", "topic": "基础概念", "q": "样本、特征、标记分别是什么？", "a": "一个瓜是一条样本；色泽、根蒂等是特征；好坏是希望预测的标记。", "pit": "青绿是特征值，色泽才是特征名称。"}, {"id": "C03", "topic": "基础概念", "q": "分类、回归、聚类怎样区分？", "a": "分类预测类别，回归预测数值，聚类依据特征形成分组，通常没有预先提供的类别标记。", "pit": "用 0、1 编码类别，仍然是分类。"}, {"id": "C04", "topic": "基础概念", "q": "监督学习中的监督是什么？", "a": "训练数据提供目标结果；分类、回归是典型监督学习任务。", "pit": "不是有人盯着电脑。"}, {"id": "C05", "topic": "基础概念", "q": "什么是泛化能力？", "a": "模型适用于未见样本的能力。训练全对不保证泛化好。", "pit": "测试成绩也只是对目标场景表现的估计。"}, {"id": "C06", "topic": "基础概念", "q": "什么是过拟合？", "a": "模型过度适应训练数据中的细节或噪声，导致对新样本表现不好。", "pit": "训练准确率高本身不能证明过拟合；留出测试集主要帮助评估，不会自动防止它。"}, {"id": "C07", "topic": "基础概念", "q": "假设空间与版本空间有何区别？", "a": "假设空间是允许考虑的候选假设集合；版本空间是其中与训练数据一致的假设集合。", "pit": "多个假设都符合训练数据，对新样本仍可能分歧。"}, {"id": "C08", "topic": "基础概念", "q": "归纳偏好与奥卡姆剃刀是什么？", "a": "归纳偏好是选择某类假设的倾向；奥卡姆剃刀倾向在符合观察的假设中选择更简单者。", "pit": "简单是一种选择依据，不保证是真相。"}, {"id": "C09", "topic": "数据与评估", "q": "训练、验证、测试三者的职责？", "a": "训练集用来学；验证集用来选择模型、参数与阈值；测试集用来最终评估。", "pit": "根据测试结果反复选择，会让最终评估偏乐观。"}, {"id": "C10", "topic": "数据与评估", "q": "什么是数据泄漏？", "a": "模型准备或选择过程使用了当时不应获得的信息，例如用全数据平均值填补缺失值。", "pit": "不看标记也可能泄漏特征统计信息。"}, {"id": "C11", "topic": "数据与评估", "q": "怎样划分同一对象的多张图片？", "a": "若目标是识别新对象，按对象分组，同一对象所有图片进入同一个集。", "pit": "图片不同不等于对象未见过。"}, {"id": "C12", "topic": "数据与评估", "q": "时间序列与年度周期怎样兼顾？", "a": "用过去预测未来，按时间顺序验证；有季节性时尽量提供多年或足够周期的数据。", "pit": "有年度周期也不意味着可以利用未来信息。"}, {"id": "C13", "topic": "分类指标", "q": "TP、FP、FN、TN 如何理解？", "a": "以坏瓜为正类：TP 找对坏瓜；FP 误报好瓜；FN 漏掉坏瓜；TN 正确放行好瓜。", "pit": "正类是关注目标，不代表好东西。"}, {"id": "C14", "topic": "分类指标", "q": "查准率 Precision 的分母是谁？", "a": "TP / (TP + FP)：所有报出的正类。问报出的准不准。", "pit": "分母不是所有实际坏瓜。"}, {"id": "C15", "topic": "分类指标", "q": "查全率 Recall / TPR 的分母是谁？", "a": "TP / (TP + FN)：所有实际正类。问目标找全没。", "pit": "漏检代价高时常更关注查全率，同时仍要看误报代价。"}, {"id": "C16", "topic": "分类指标", "q": "假正例率 FPR 的分母是谁？", "a": "FP / (FP + TN)：所有实际负类。问好瓜中误报多少。", "pit": "不是 1 − 查准率。"}, {"id": "C17", "topic": "分类指标", "q": "准确率与 F1 各有什么局限？", "a": "准确率 = (TP + TN) / 总数；F1 = 2PR / (P + R)，是查准率与查全率的调和平均。", "pit": "准确率可掩盖少数类失败；F1 不直接表达所有错误代价或业务约束。"}, {"id": "C18", "topic": "分类指标", "q": "降低阈值会怎样？", "a": "分数越高越像正类时，降低阈值会扩大报出集合；同一批数据上 TPR、FPR 不下降。", "pit": "查准率不保证单调下降；分数不变时完整 ROC-AUC 不变。"}, {"id": "C19", "topic": "ROC 与 AUC", "q": "P-R 与 ROC 的坐标是什么？", "a": "P-R：横轴 Recall、纵轴 Precision，理想在右上；ROC：横轴 FPR、纵轴 TPR，理想在左上。", "pit": "不能混淆两张图的横轴。"}, {"id": "C20", "topic": "ROC 与 AUC", "q": "AUC 有哪两种算法？", "a": "按 ROC 相邻点的梯形面积求和；或计算正负样本配对中正类分数更高的比例，同分计半次。", "pit": "需同时有正负类；仅凭一个 ROC 点不能算整条曲线面积。"}, {"id": "C21", "topic": "ROC 与 AUC", "q": "AUC 等于 1、0.5、0 意味着什么？", "a": "1 是当前数据全部正负配对排对；0 是全部排反；0.5 是配对胜率一半（同分计半）。", "pit": "随机打分期望为 0.5；得到 0.5 不证明分数完全随机。"}, {"id": "C22", "topic": "ROC 与 AUC", "q": "分数方向反转后 AUC 怎样变？", "a": "同一批数据，按同分计半：AUC(-s) = 1 − AUC(s)。", "pit": "低 AUC 不一定只是方向错，先查正类和分数含义。"}, {"id": "C23", "topic": "ROC 与 AUC", "q": "AUC、阈值、概率校准分别看什么？", "a": "AUC 看排序；阈值决定报出哪些；校准看预测概率与实际发生频率是否一致。", "pit": "AUC 0.95 不等于查全率或准确率 95%，也不保证概率可信。"}, {"id": "C24", "topic": "分类指标", "q": "为什么类别不平衡时还要看 P-R 与误报数？", "a": "负类很多时，较小 FPR 也可能带来大量 FP，导致查准率很低。", "pit": "跨正类比例比较查准率时，要说明背景。"}, {"id": "C25", "topic": "回归与成本", "q": "MSE 与 RMSE 怎么算？", "a": "令 e = 预测 − 实际：MSE = 平均 e²；RMSE = √MSE。同一数据上两者排序相同。", "pit": "目标单位为 kg 时，MSE 为 kg²，RMSE 为 kg。"}, {"id": "C26", "topic": "回归与成本", "q": "MAE 怎样算，与 MSE 有何区别？", "a": "MAE = 平均 |e|，单位与目标相同；MSE 对大误差增长更快，两者可能选出不同模型。", "pit": "不要直接比较 MAE 和 MSE 的数值大小，量纲不同。"}, {"id": "C27", "topic": "回归与成本", "q": "如何把指标对应到实际成本？", "a": "对称线性成本 c 元/kg 时平均成本 = c × MAE；高估低估代价不同可逐样本计算方向性成本再平均。", "pit": "指标要体现实际目标；单一指标达标不能抵消另一硬约束失败。"}, {"id": "C28", "topic": "数据与评估", "q": "一次准确率 91% 对 90% 能断定优劣吗？", "a": "不能。差异可能受样本组成、数量与训练随机性影响，需要合理验证及不确定性分析。", "pit": "多次看最终测试集并据此调模型不是解决办法。"}, {"id": "C29", "topic": "交叉验证", "q": "5 折交叉验证怎样运行？", "a": "开发数据分 5 份，每轮 4 份训练、1 份验证；每轮从头训练，共 5 次，每条数据验证 1 次。", "pit": "刚讲解，尚待你独立作答；原有练习不标为已掌握。"}, {"id": "C30", "topic": "交叉验证", "q": "交叉验证有哪些边界？", "a": "预处理每折只用训练部分拟合；比较模型用同一划分；分组和时间约束仍适用；最终测试集不参与选择。", "pit": "训练集互有重叠，各折成绩不是独立重复实验；选定后可用全部开发数据重训。"}], "questions": [{"id": "Q01", "level": "基础", "topic": "基础概念", "prompt": "一条记录是“色泽=青绿，重量=4kg，结果=好瓜”。分别指出样本、特征、特征值与标记。", "answer": "整条记录对应一个样本；特征是色泽、重量；特征值为青绿、4kg；标记为好瓜。", "why": "区分描述对象的信息与目标结果。", "refs": ["C02"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q02", "level": "基础", "topic": "基础概念", "prompt": "预测房价、判断垃圾邮件、无风格标记地给歌曲分组，分别是什么任务？", "answer": "回归、分类、聚类。", "why": "先看输出及训练时是否有目标标记。", "refs": ["C03", "C04"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q03", "level": "基础", "topic": "基础概念", "prompt": "好瓜编码为 1、坏瓜为 0，是回归吗？为什么？", "answer": "不是，仍是分类；0、1 是类别代号。", "why": "输出的意义比编码形式更重要。", "refs": ["C03"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q04", "level": "基础", "topic": "基础概念", "prompt": "训练全对但新瓜准确率 60%，另一个训练 90%、新瓜 85%。新瓜评估公平可靠时选谁？能单凭训练全对认定过拟合吗？", "answer": "选后者；不能单凭训练全对认定过拟合。", "why": "目标是泛化；训练与新样本之间的明显差距提示过拟合风险。", "refs": ["C05", "C06"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q05", "level": "基础", "topic": "基础概念", "prompt": "所有可考虑的规则，与其中符合全部训练记录的规则集合，分别叫什么？", "answer": "假设空间、版本空间。", "why": "版本空间是前者中与训练数据一致的部分。", "refs": ["C07"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q06", "level": "基础", "topic": "基础概念", "prompt": "多条规则都符合数据时，倾向选简单规则，体现了什么？简单规则保证正确吗？", "answer": "归纳偏好，符合奥卡姆剃刀的思路；不保证正确。", "why": "有限观察不能唯一确定真实规律。", "refs": ["C08"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q07", "level": "基础", "topic": "数据与评估", "prompt": "选择决策树还是神经网络、选择树深度，应看哪个集？最后评估看哪个集？", "answer": "前两者看验证集，最终看测试集。", "why": "模型类型和深度都属于方案选择。", "refs": ["C09"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q08", "level": "基础", "topic": "分类指标", "prompt": "坏瓜是正类：把好瓜报成坏瓜、把坏瓜放行，分别是 FP 还是 FN？", "answer": "前者 FP，后者 FN。", "why": "FP 是误报，FN 是漏检。", "refs": ["C13"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q09", "level": "基础", "topic": "ROC 与 AUC", "prompt": "ROC 和 P-R 的坐标各是什么？理想方向各在哪？", "answer": "ROC 横 FPR、纵 TPR，左上；P-R 横 Recall、纵 Precision，右上。", "why": "两者的横轴不同。", "refs": ["C19"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q10", "level": "基础", "topic": "ROC 与 AUC", "prompt": "AUC=0.95 能否推出查全率 95%、准确率 95%、概率准确？", "answer": "三者均不能。", "why": "AUC 是整体排序指标；分类结果取决于阈值，概率可信度看校准。", "refs": ["C23"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q11", "level": "计算", "topic": "分类指标", "prompt": "实际坏瓜100、好瓜900；找出坏瓜80，误报好瓜40。求 TP、FN、FP、TN、查准率、查全率、FPR、准确率。", "answer": "TP=80，FN=20，FP=40，TN=860；P≈66.67%，R=80%，FPR≈4.44%，准确率94%。", "why": "查准分母120；查全分母100；FPR分母900；准确率940/1000。", "refs": ["C13", "C14", "C15", "C16", "C17"], "hint": "TP=找对正类；FN=实际正类−TP；TN=实际负类−FP。P=TP/(TP+FP)，R=TP/(TP+FN)，FPR=FP/(FP+TN)，Accuracy=(TP+TN)/N。"}, {"id": "Q12", "level": "计算", "topic": "分类指标", "prompt": "坏瓜10、好瓜990，全部预测为坏瓜。求查全率、查准率、FPR。", "answer": "100%、1%、100%。", "why": "所有目标找到，但全部好瓜也被误报。", "refs": ["C14", "C15", "C16"], "hint": "全部报出时，TP=实际坏瓜数，FP=实际好瓜数。R=TP/实际正类数，P=TP/报出总数，FPR=FP/实际负类数。"}, {"id": "Q13", "level": "计算", "topic": "分类指标", "prompt": "模型A的 P=90%、R=10%；模型B的 P=R=60%。分别求 F1。", "answer": "A为18%；B为60%。", "why": "分别代入 2PR/(P+R)。", "refs": ["C17"], "hint": "F1=2PR/(P+R)，百分比先写成小数。可直接让代码代入。"}, {"id": "Q14", "level": "计算", "topic": "ROC 与 AUC", "prompt": "按分数降序：坏0.9、好0.8、坏0.7、好0.1。用配对法算 AUC。", "answer": "3/4=0.75。", "why": "第一个坏瓜赢两对，第二个坏瓜赢一对。", "refs": ["C20"], "hint": "AUC=(正类分数高于负类的配对数+0.5×同分配对数)/(正类数×负类数)。"}, {"id": "Q15", "level": "计算", "topic": "ROC 与 AUC", "prompt": "一个正类分数0.8，两个负类分数0.8、0.2。AUC是多少？", "answer": "(0.5+1)/2=0.75。", "why": "同分配对计半次，严格胜出计一次。", "refs": ["C20"], "hint": "同分计半：AUC=(胜出配对数+0.5×同分配对数)/总配对数。"}, {"id": "Q16", "level": "计算", "topic": "ROC 与 AUC", "prompt": "ROC点依次为(0,0)、(0,0.5)、(0.5,0.5)、(0.5,1)、(1,1)。算曲线下面积。", "answer": "0.5×0.5+0.5×1=0.75。", "why": "竖直段宽度0；其余两段下方是矩形。", "refs": ["C20"], "hint": "每段面积=(横坐标之差)×(两端纵坐标之和)/2，再求和。竖直段面积为0。"}, {"id": "Q17", "level": "计算", "topic": "ROC 与 AUC", "prompt": "同一批数据原 AUC=0.1，分数取负后是多少？若只改分类阈值呢？", "answer": "取负后0.9；仅改阈值时完整ROC-AUC仍为0.1。", "why": "前者反转排序，后者不改变分数排序。", "refs": ["C18", "C22"], "hint": "同一批数据：AUC(-s)=1−AUC(s)；仅改分类阈值不改变原分数的完整ROC-AUC。"}, {"id": "Q18", "level": "计算", "topic": "分类指标", "prompt": "实际坏瓜10、好瓜990；找到9个坏瓜，误报9个好瓜。求查全率、查准率、FPR及报出总数。", "answer": "90%、50%、约0.91%、18个。", "why": "分母依次为10、18、990。", "refs": ["C14", "C15", "C16", "C24"], "hint": "R=找到坏瓜/实际坏瓜；P=找到坏瓜/所有报出；FPR=误报好瓜/实际好瓜。"}, {"id": "Q19", "level": "计算", "topic": "回归与成本", "prompt": "实际都是5kg，C预测3、7kg，D预测5、8kg。分别求 MAE、MSE、RMSE，比较选择。", "answer": "C：MAE=2kg，MSE=4kg²，RMSE=2kg；D：MAE=1.5kg，MSE=4.5kg²，RMSE≈2.12kg。MAE选D，MSE和RMSE选C。", "why": "平方对大误差影响更大；RMSE与MSE排序一致。", "refs": ["C25", "C26"], "hint": "e=预测−实际；MAE=平均|e|；MSE=平均e²；RMSE=√MSE。重量单位kg，MSE单位kg²。"}, {"id": "Q20", "level": "计算", "topic": "回归与成本", "prompt": "实际都是5kg，E预测4、5kg，F预测6、6kg。低估每kg损失10元，高估每kg损失2元。求各模型 MAE 与平均成本。", "answer": "E：MAE=0.5kg，平均5元；F：MAE=1kg，平均2元。MAE选E，成本选F。", "why": "E损失10、0；F损失2、2，各自取平均。", "refs": ["C27"], "hint": "e=预测−实际；MAE=平均|e|；每次成本=10×max(-e,0)+2×max(e,0)，再求平均。"}, {"id": "Q21", "level": "辨析", "topic": "数据与评估", "prompt": "先用全部数据的平均值填补缺失重量，再划分训练验证测试；没有看标记，是否就没有泄漏？", "answer": "有泄漏；统计量已使用验证和测试特征信息。应先划分，再只从训练部分拟合填补规则。", "why": "泄漏不只发生在标记上。", "refs": ["C10"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q22", "level": "辨析", "topic": "数据与评估", "prompt": "同一病人10张图随机拆成训练8张、测试2张，能可靠检验对新病人的识别吗？怎么改？", "answer": "不能；按病人分组，同一病人图片放同一集。", "why": "识别见过的病人不能代表对新病人的泛化。", "refs": ["C11"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q23", "level": "辨析", "topic": "数据与评估", "prompt": "销量有年度周期，因此可以随机打乱所有年份来检验预测未来的能力。对吗？", "answer": "不对；按时间顺序评估，同时尽量覆盖多个年度周期。", "why": "季节性不允许未来信息流向过去。", "refs": ["C12"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q24", "level": "辨析", "topic": "数据与评估", "prompt": "反复看最终测试成绩，直到选出最好的模型，再报告该成绩。有何问题？", "answer": "测试集参与了选择，最终评估可能偏乐观。应使用验证流程选择并保留独立最终评估。", "why": "测试反馈也是信息。", "refs": ["C09"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q25", "level": "辨析", "topic": "分类指标", "prompt": "在同一批数据、同一模型分数下，降低阈值，查准率一定下降吗？TPR、FPR呢？", "answer": "查准率不保证单调下降；TPR、FPR不下降，可能保持不变。", "why": "新增报出样本的正负构成决定查准率变化。", "refs": ["C18"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q26", "level": "辨析", "topic": "ROC 与 AUC", "prompt": "一个模型 AUC=0.5，所以分数一定完全随机，任何阈值也都没有用。对吗？", "answer": "不对。只说明正负配对胜率为一半（同分计半），不能推出完全随机或各阈值都无用。", "why": "例如降序“坏、好、好、坏” AUC为0.5，但最前面的样本为正类。", "refs": ["C21"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q27", "level": "辨析", "topic": "ROC 与 AUC", "prompt": "AUC很低就一定只是分数方向反了，直接在最终测试集试两个方向选大的即可。对吗？", "answer": "不对。先确认正类与分数含义；方向或方案应事先明确或用验证集选择，不能据最终测试反复挑选。", "why": "低AUC也可能代表模型差等其他问题。", "refs": ["C22", "C09"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q28", "level": "辨析", "topic": "分类指标", "prompt": "FPR只有1%，所以误报数量必然少、查准率必然高。对吗？", "answer": "不对。负类数量很大时1%也可能很多，查准率还取决于正类比例及查全率。", "why": "比例必须结合分母与类别构成。", "refs": ["C24"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q29", "level": "辨析", "topic": "回归与成本", "prompt": "预测重量以kg计，MSE=2、MAE=1.5，所以 MAE 表明模型更好。这个比较成立吗？", "answer": "不成立。两个指标量纲与定义不同；MSE单位kg²，MAE单位kg。", "why": "应在同一指标和数据条件下比较不同模型。", "refs": ["C25", "C26"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q30", "level": "辨析", "topic": "交叉验证", "prompt": "5折时沿用上一轮模型继续训练，填补均值也用全部开发数据计算，可行吗？", "answer": "不可行。每轮重新训练；填补规则只在该折训练部分拟合，再用于验证折。", "why": "否则验证数据可能通过训练历史或预处理泄漏。", "refs": ["C29", "C30"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q31", "level": "应用", "topic": "分类指标", "prompt": "漏掉坏瓜损失很大，人工复查很便宜。优先关注什么？是否可以完全不管其他指标？", "answer": "优先关注查全率，同时检查误报量、复查容量与成本，不能忽略其他约束。", "why": "目标导向不等于只看一个数。", "refs": ["C15", "C24", "C27"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q32", "level": "应用", "topic": "分类指标", "prompt": "找到9/10个坏瓜，误报9个好瓜；每天最多复查20个，要求查全率≥95%。方案达标吗？", "answer": "未同时达标。报出18≤20，但查全率90%\u003c95%。", "why": "硬约束要逐项满足。", "refs": ["C27"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q33", "level": "应用", "topic": "回归与成本", "prompt": "无论高估或低估，每差1kg成本2元，MAE=1.5kg。平均成本多少？选 MAE 还是 MSE 更直接？", "answer": "3元；MAE更直接。", "why": "线性对称代价对应2×MAE。", "refs": ["C27"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q34", "level": "应用", "topic": "ROC 与 AUC", "prompt": "模型的两个坏瓜分数0.49、0.48，好瓜0.12、0.11。阈值0.5与0.3下分别报出什么？AUC多少？", "answer": "0.5下无报出；0.3下报出两个坏瓜。两者的完整ROC-AUC均为1。", "why": "所有坏瓜都排在好瓜前面，阈值不改变排序。", "refs": ["C18", "C23"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q35", "level": "应用", "topic": "ROC 与 AUC", "prompt": "分数均在0～1，把所有分数平方（严格保持排序）。AUC会变吗？固定阈值0.5的结果一定不变吗？", "answer": "AUC不变；固定数值阈值结果可能改变。", "why": "例如0.6平方成0.36，会由报出变为不报出。", "refs": ["C23"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q36", "level": "应用", "topic": "分类指标", "prompt": "两个场景 TPR=90%、FPR=10%。A有100坏100好，B有10坏990好。各有多少误报，查准率多少？能推出AUC相同吗？", "answer": "A误报10，P=90%；B误报99，P≈8.33%。不能仅凭一个ROC点推出完整AUC相同。", "why": "混淆矩阵工作点不等于整条曲线。", "refs": ["C20", "C24"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q37", "level": "应用", "topic": "数据与评估", "prompt": "一次测试 A准确率91%、B为90%，能保证未来A更好？怎样更合理地比较？", "answer": "不能。合理增加代表性样本，使用匹配任务的验证流程、相同数据划分，考察波动与不确定性，保留最终测试。", "why": "不能用不断调整最终测试评估来追求确定性。", "refs": ["C28", "C30"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q38", "level": "应用", "topic": "交叉验证", "prompt": "独立保留最终测试集后，开发数据1000条做等分5折。每轮多少训练与验证？共训练几次，每条验证几次？测试集加入吗？", "answer": "每轮800训练、200验证；本次单一方案交叉验证共训练5次，每条验证1次；最终测试集不加入。", "why": "选定方案后的最终重训另算，不包含在这5次内。", "refs": ["C29", "C30"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q39", "level": "应用", "topic": "交叉验证", "prompt": "同一病人有多张图，比较两个模型做5折。如何划分、比较和拟合预处理？", "answer": "按病人分组分折，两个模型使用相同折；每轮仅用训练折拟合预处理与模型，验证折只用于评估；最终测试集独立。", "why": "对象边界优先于机械随机打散。", "refs": ["C11", "C30"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}, {"id": "Q40", "level": "应用", "topic": "交叉验证", "prompt": "5折交叉验证得到五个成绩，选最高的一折当最终分数可以吗？这五个成绩都是独立实验吗？", "answer": "不可以，应汇总并报告各折与均值等；训练数据重叠，不能直接视为独立重复实验。", "why": "正式比较检验尚待后续学习，不在这里假设独立性。", "refs": ["C28", "C30"], "hint": "可使用 AI/代码辅助计算；重点解释判断理由。"}]}</script><script>
+const data=JSON.parse(document.getElementById('study-data').textContent), key='xialiwei-watermelon-review-v1';let state={cards:{},questions:{},drafts:{}};let storageOK=true;
+try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved)state={cards:saved.cards||{},questions:saved.questions||{},drafts:saved.drafts||{}}}catch(e){storageOK=false}
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let cards=[...data.cards],questions=[...data.questions];
+function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){storageOK=false}progress()}
+function progress(){let k=Object.values(state.cards).filter(x=>x==='known').length,c=Object.values(state.questions).filter(x=>x==='correct').length,r=Object.values(state.questions).filter(x=>x==='review').length;$('#progress').textContent=`已理解知识卡 ${k}/30 · 自评答对 ${c}/40 · 待复习题 ${r} · 自评不等于自动测评`;if(!storageOK)$('#toast').textContent='当前浏览器无法持久保存，请使用“导出进度”备份。'}
+function marks(kind,id,labels){return `<div class="marks">${labels.map(([v,l])=>`<button data-kind="${kind}" data-id="${id}" data-value="${v}" aria-pressed="${(state[kind][id]||'new')===v}">${l}</button>`).join('')}</div>`}
+function renderCards(){let term=$('#card-search').value.trim().toLowerCase(),topic=$('#card-topic').value,st=$('#card-state').value;const list=cards.filter(c=>(topic==='all'||c.topic===topic)&&(st==='all'||(state.cards[c.id]||'new')===st)&&JSON.stringify(c).toLowerCase().includes(term));$('#card-list').innerHTML=list.map(c=>`<article class="card"><span class="tag">${c.id} · ${esc(c.topic)}</span><h3>${esc(c.q)}</h3><details><summary>展开答案与易错点</summary><p>${esc(c.a)}</p><p class="pit">易错点：${esc(c.pit)}</p></details>${marks('cards',c.id,[['known','已理解'],['review','待复习'],['new','未标记']])}</article>`).join('')||'<p>没有符合筛选条件的卡片。</p>'}
+function renderQuestions(){let term=$('#question-search').value.trim().toLowerCase(),level=$('#question-level').value,st=$('#question-state').value;const list=questions.filter(q=>(level==='all'||q.level===level)&&(st==='all'||(state.questions[q.id]||'new')===st)&&(q.id+' '+q.prompt+' '+q.topic).toLowerCase().includes(term));$('#question-list').innerHTML=list.map(q=>`<article class="question"><span class="tag">${q.id} · ${q.level} · ${esc(q.topic)}</span><h3>${esc(q.prompt)}</h3>${q.level==='计算'?`<p class="pit">公式辅助：${esc(q.hint)}</p>`:''}<label class="small" for="draft-${q.id}">我的作答</label><textarea id="draft-${q.id}" data-draft="${q.id}" placeholder="写出你的选择、理由；需要时用公式或工具辅助">${esc(state.drafts[q.id]||'')}</textarea><details><summary>查看本题答案与解析</summary><p><strong>答案：</strong>${esc(q.answer)}</p><p><strong>解析：</strong>${esc(q.why)}</p><p class="small">回看知识卡：${q.refs.map(x=>`<a href="#cards" data-card-ref="${x}">${x}</a>`).join('、')}</p></details>${marks('questions',q.id,[['correct','答对'],['review','待复习'],['new','未标记']])}</article>`).join('')||'<p>没有符合筛选条件的题目。</p>'}
+function renderAnswers(){$('#answer-list').innerHTML=data.questions.map(q=>`<details><summary>${q.id} · ${q.level} · ${esc(q.topic)}</summary><p>${esc(q.prompt)}</p><p><strong>答案：</strong>${esc(q.answer)}</p><p>${esc(q.why)}</p><p class="small">回看：${q.refs.join('、')}</p></details>`).join('')}
+function tab(name){if(!['starter','overview','cards','quiz','answers'].includes(name))name='starter';for(const el of document.querySelectorAll('main>section'))el.hidden=el.id!==name;for(const el of document.querySelectorAll('nav button'))el.setAttribute('aria-selected',String(el.dataset.tab===name));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+$('#card-topic').innerHTML='<option value="all">全部主题</option>'+[...new Set(data.cards.map(c=>c.topic))].map(t=>`<option>${esc(t)}</option>`).join('');
+document.addEventListener('click',e=>{const btn=e.target.closest('button');if(btn?.dataset.tab){location.hash=btn.dataset.tab;tab(btn.dataset.tab)}if(btn?.dataset.kind){state[btn.dataset.kind][btn.dataset.id]=btn.dataset.value;save();btn.dataset.kind==='cards'?renderCards():renderQuestions()}const ref=e.target.closest('[data-card-ref]');if(ref){$('#card-search').value=ref.dataset.cardRef;$('#card-topic').value='all';$('#card-state').value='all';renderCards();tab('cards')}});
+document.addEventListener('input',e=>{if(e.target.dataset.draft){state.drafts[e.target.dataset.draft]=e.target.value;save()}});
+for(const sel of ['#card-search','#card-topic','#card-state'])$(sel).addEventListener('input',renderCards);for(const sel of ['#question-search','#question-level','#question-state'])$(sel).addEventListener('input',renderQuestions);
+$('#card-shuffle').onclick=()=>{shuffle(cards);renderCards()};$('#question-shuffle').onclick=()=>{shuffle(questions);renderQuestions()};$('#print-quiz').onclick=()=>{document.body.classList.add('print-questions');window.print();document.body.classList.remove('print-questions')};
+$('#export').onclick=()=>{const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),...state},null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='watermelon-review-progress.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+$('#reset').onclick=()=>{if(confirm('清空当前浏览器中的自评和作答？仓库笔记不受影响。')){state={cards:{},questions:{},drafts:{}};save();renderCards();renderQuestions()}};
+window.addEventListener('hashchange',()=>tab(location.hash.slice(1)));renderCards();renderQuestions();renderAnswers();progress();tab(location.hash.slice(1));
+</script></body></html>
