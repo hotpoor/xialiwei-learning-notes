@@ -1,0 +1,12 @@
+{
+  "source": "in-app browser visible UI observation",
+  "input": "synthetic moving shapes, no camera",
+  "resolution": 256,
+  "test": "60-second automatic stop",
+  "frames_at_stop": 301,
+  "displayed_average_fps_at_stop": 5.0,
+  "screenshot_frames": 299,
+  "screenshot_displayed_average_fps": 5.4,
+  "camera_status": "start requested but no video stream obtained; user-side permission/device confirmation remains",
+  "limitations": "Rounded UI observations; browser visibility, capture and other workloads can affect displayed FPS. Not camera glass-to-glass latency."
+}

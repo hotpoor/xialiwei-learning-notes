@@ -1,0 +1,45 @@
+{
+  "model": "stabilityai/sd-turbo",
+  "revision": "b261bac6fd2cf515557d5d0707481eafa0485ec2",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "torch": "2.7.1+cu126",
+  "strength": 0.5,
+  "total_steps": 2,
+  "effective_steps": 1,
+  "warmup_frames": 3,
+  "input": "moving synthetic shapes",
+  "idle_gpu_board_watts_mean": 129.01,
+  "results": [
+    {
+      "resolution": 256,
+      "frames": 212,
+      "seconds": 30.035,
+      "sequential_server_fps": 7.06,
+      "frame_ms_median": 140.48,
+      "frame_ms_p95": 156.83,
+      "inference_ms_median": 138.7,
+      "gpu_board_watts_mean": 247.96,
+      "gpu_board_kwh_per_hour": 0.248,
+      "cuda_peak_allocated_mib": 2640.6,
+      "power_samples": 54
+    },
+    {
+      "resolution": 512,
+      "frames": 123,
+      "seconds": 30.055,
+      "sequential_server_fps": 4.09,
+      "frame_ms_median": 244.84,
+      "frame_ms_p95": 278.11,
+      "inference_ms_median": 240.7,
+      "gpu_board_watts_mean": 314.68,
+      "gpu_board_kwh_per_hour": 0.3147,
+      "cuda_peak_allocated_mib": 3096.8,
+      "power_samples": 53
+    }
+  ],
+  "limitations": [
+    "No webcam capture, network, browser rendering or display latency in FPS.",
+    "GPU board power only; not whole-machine wall power. Includes other GPU activity if present.",
+    "Sequential single-user baseline; no temporal model or concurrency claims."
+  ]
+}

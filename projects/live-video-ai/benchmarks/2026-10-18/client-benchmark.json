@@ -1,0 +1,12 @@
+{
+  "input": "moving synthetic shapes",
+  "path": "localhost WebSocket; record whether run on server or through SSH in accompanying report",
+  "resolution": 256,
+  "frames": 167,
+  "seconds": 30.146,
+  "sequential_client_fps": 5.54,
+  "roundtrip_ms_median": 174.01,
+  "roundtrip_ms_p95": 235.95,
+  "prompt_change_request": "passed",
+  "limitations": "No camera capture, browser decoding/rendering or screen scanout in this measurement."
+}

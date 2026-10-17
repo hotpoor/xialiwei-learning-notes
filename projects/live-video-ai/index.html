@@ -1,6 +1,6 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI · 目标与设备路线</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
-<p>记录日期：2026-10-18。状态：已通过SSH检查Windows/WSL2与GPU，隔离推理环境正在安装；尚未实测模型或摄像头。本文不是 Decart 内部架构的复现说明。</p>
-<p><a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 Live AI 记录</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
+<p>记录日期：2026-10-18。状态：3090本地图像流、WebSocket与Mac SSH链路已跑通并测得帧率与板卡功耗；真实摄像头权限与画面尚待确认。本文不是 Decart 内部架构的复现说明。</p>
+<p><a href="benchmarks/2026-10-18/README.md">实测报告：帧率与成本</a> · <a href="benchmarks/2026-10-18/index.html">报告HTML/SVG</a> · <a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
 <h2>1. 已确认的目标与设备</h2>
 <ul>
 <li>目标：Lucy 类——摄像头实时输入，结合提示词改变人物、场景或风格；暂不以 Oasis 类可交互世界为主线。</li>
@@ -9,7 +9,7 @@
 <li>DGX Spark：用户询问其可能性，尚未确认已拥有、具体配置或采购意图。</li>
 <li>偏好：理解与正确运用优先，AI/代码辅助计算，SVG/Markdown/HTML 记录，选择题巩固。</li>
 </ul>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1010" viewBox="0 0 1100 1010"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1100" height="1010" fill="#f3f6fb"/><text x="40" y="55" class="h">Live AI：先做实时视频编辑，再逐步训练</text><text x="40" y="100" class="t">目标：摄像头输入 + 提示词 → 改人物、场景或风格（Lucy 类）</text><rect x="40" y="135" width="1020" height="240" rx="16" fill="white"/><text x="65" y="180" class="h">第一版建议：先用现有设备建立实测基线</text><rect x="65" y="210" width="280" height="90" rx="12" fill="#e0f2eb"/><text x="85" y="246" class="t">M1 Max / 浏览器</text><text x="85" y="278" class="sm">摄像头 · 提示词 · 显示</text><text x="365" y="262" class="h">→</text><rect x="415" y="210" width="300" height="90" rx="12" fill="#e5edf9"/><text x="435" y="246" class="t">3090 · Windows + WSL2</text><text x="435" y="278" class="sm">CUDA 推理服务 · 返回画面</text><text x="740" y="262" class="h">→</text><rect x="790" y="210" width="245" height="90" rx="12" fill="#e0f2eb"/><text x="810" y="246" class="t">Mac 浏览器</text><text x="810" y="278" class="sm">查看编辑后的视频</text><text x="65" y="344" class="sm">这是分工架构，不是把三台设备的内存合并；尚未部署或测得帧率。</text><rect x="40" y="400" width="1020" height="245" rx="16" fill="white"/><text x="65" y="445" class="h">DGX Spark 和笔记本怎么定位？</text><text x="65" y="492" class="t">DGX Spark：可探索本地扩散/视频推理，实时能力与 ARM 依赖需验证。</text><text x="65" y="539" class="t">M1 Max 本地：部分扩散可用 MPS；CUDA 方案不能原样照搬。</text><text x="65" y="586" class="t">笔记本做前端：可把摄像头画面交给 3090 或 Spark 推理。</text><text x="65" y="622" class="sm">加载得下 ≠ 运行得快 ≠ 交互延迟低 ≠ 画面连续稳定。</text><rect x="40" y="670" width="1020" height="285" rx="16" fill="#e0f2eb"/><text x="65" y="715" class="h">按成果推进，而不是先把全书学完</text><text x="65" y="762" class="t">1. 预训练模型跑通单帧 → 连续输入、连续输出、可切提示词</text><text x="65" y="809" class="t">2. 测首帧等待 / 端到端延迟 / 有效 FPS / 闪烁与动作保留</text><text x="65" y="856" class="t">3. 对比图像流基线与流式视频模型，找出真正瓶颈</text><text x="65" y="903" class="t">4. 再做小范围 LoRA / 微调；时序与低延迟问题分别解决</text></svg></p>
+<p><img src="roadmap.svg" alt="Live AI 设备分工与推进路线"></p>
 <h2>2. 核心判断</h2>
 <p>可以用现有设备开始原型；这不构成达到 Lucy 商用画质、帧率和延迟的承诺。把视频输入接到已有模型、基于模型微调、从零训练基础模型，是不同规模的工作。</p>
 <p>Decart 当前公开的 Lucy 实时能力是根据指令编辑直播视频；其产品接口与 SDK 不等于公开全部实时模型权重、训练细节。<a href="https://docs.platform.decart.ai/models/realtime/lucy-2.5">Lucy 官方文档</a></p>
@@ -63,7 +63,7 @@ Windows主机 / WSL2中的3090推理服务
 Mac浏览器显示与交互
 </code></pre>
 <p>这是工程分工建议，不是多机显存拼接。先不让两台Mac参与同一模型的逐层推理，避免一开始引入跨设备通信复杂度。WSL2对CUDA有官方支持；Windows主机驱动与WSL内开发环境按官方方式配置，不能在WSL里另装Linux显示驱动。<a href="https://docs.nvidia.com/cuda/wsl-user-guide/index.html">CUDA on WSL官方说明</a></p>
-<p>实际联网部署时再检查摄像头访问、网络路由与安全上下文；这些目前尚未操作。</p>
+<p>已通过localhost与SSH隧道访问3090，合成图链路已测；真实摄像头访问待用户完成权限确认。</p>
 <h2>5. 候选技术路线</h2>
 <table>
 <thead>
@@ -114,7 +114,8 @@ Mac浏览器显示与交互
 <p>先发现具体失败点，再决定训练目标。风格/角色的图像LoRA可作为较小的第一步，但它不自动解决时序闪烁、长期一致性或推理速度。视频微调、蒸馏与因果缓存需分别研究，不能承诺所有方法均在24GB显存下可训练。</p>
 <p>学习主线改为：张量和神经网络直觉 → 图像扩散与条件控制 → 视频时序一致性 → 流式推理/缓存/队列 → 数据与小范围训练 → 任务评估。西瓜书保留作泛化、数据边界、优化与评价的基础参考，不要求先学完整本书或熟练手算指标。</p>
 <h2>8. 下一步</h2>
-<p>已通过保存的SSH连接检查Windows/WSL2，确认WSL内可识别3090。独立venv已创建，PyTorch及图像推理依赖安装中。下一步验证CUDA矩阵计算、下载已固定版本的模型并做256×256合成图推理，然后才验收摄像头。</p>
+<p>已完成环境安装、CUDA计算、固定版本模型下载、单帧及连续图像流测试。256服务端7.06 FPS、Mac经SSH客户端5.54 FPS，板卡平均约248W。下一步在用户本机确认摄像头权限，再检查真人效果、闪烁、动作与后续加速。</p>
 <h2>第一版已启动</h2>
 <p><a href="setup/README.md">第1步：检查Windows/WSL2主机</a> · <a href="setup/index.html">HTML图解</a></p>
-<p>已通过保存的SSH连接完成主机检查，正在独立venv内安装环境。详见搭建记录。</p></main></html>
+<p>推理服务已在WSL独立运行。实测数据、成本口径与待验收摄像头部分见上方报告和搭建记录。</p>
+</main></html>

@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 搭建记录</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 Live AI 实测</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
 <p>日期：2026-10-18。<a href="../README.md">返回目标路线</a></p>
 <h2>已确认的第一版范围</h2>
 <ul>
@@ -44,17 +44,17 @@
 <tr>
 <td>4</td>
 <td>下载预训练模型，验证单帧转换</td>
-<td>正在下载官方固定版本权重，单帧待运行</td>
+<td>已完成；本地缓存离线加载与256单帧均通过</td>
 </tr>
 <tr>
 <td>5</td>
 <td>浏览器摄像头连续输入与256×256展示</td>
-<td>未执行</td>
+<td>浏览器60秒合成图测试完成301帧、显示平均5.0 FPS；真实摄像头尚未取得视频流</td>
 </tr>
 <tr>
 <td>6</td>
 <td>提示词切换、延迟/FPS与画面连续性检查</td>
-<td>未执行</td>
+<td>合成图连续FPS、功耗和客户端提示词切换已测；真人连续性待验收</td>
 </tr>
 <tr>
 <td>7</td>
@@ -170,4 +170,13 @@ wsl --list --verbose
 <p>实际运行 <code>verify_cuda.py</code>：PyTorch <code>2.7.1+cu126</code>、CUDA运行时12.6、RTX3090，矩阵运算通过。检查时空闲显存23227 MiB（瞬时值）。后续使用 <code>benchmark.py</code> 在模型预热后分别进行256和512合成动态图顺序推理，采样GPU板卡功耗。服务器吞吐量、浏览器往返帧率和摄像头完整延迟分别标注，不混用；显卡功耗不冒充整机插座功耗。</p>
 <h3>依赖安装完成，开始权重下载</h3>
 <p>隔离环境安装完成，安装日志返回 <code>INSTALL_DONE</code>。首次加载从官方Hugging Face仓库下载固定版本SD-Turbo，fp16主权重合计约2.4 GiB；远端下载出现读超时后断点续传。同时尝试通过Mac下载同一官方版本、核对LFS SHA256后经SSH传输，避免改用来源不明的模型。权重不提交到公开仓库。</p>
+<h3>本地推理与传输测试通过</h3>
+<p>官方权重下载完成后，首次加载成功。一个约167MB组件曾因网络中断失败，服务保留已完成缓存重试后补齐；最终在离线模式下运行单帧与连续测试成功。启动阶段遇到本地文件读取等待，随后其他内存占用下降；未把启动等待记入稳定FPS。</p>
+<p>256×256服务端212帧／30.035秒：7.06 FPS；512×512为4.09 FPS。模型峰值已分配显存分别2640.6／3096.8 MiB。Mac经SSH WebSocket客户端256测试167帧／30.146秒：5.54 FPS，往返中位数174.01 ms。</p>
+<p>板卡功耗分别约247.96／314.68 W。按1元／度的示例电价，256持续运行的板卡用电约0.25元／小时；不是整机电费，也不包含折旧。其他真实电价与插座功耗尚未取得。</p>
+<p>服务已改用WSL transient systemd单元<code>liveai-style-v1.service</code>运行，脱离安装SSH会话。仅监听localhost，Mac通过SSH隧道访问。未设置开机自启。</p>
+<p><a href="../benchmarks/2026-10-18/README.md">完整实测报告、SVG与原始数据</a> · <a href="../benchmarks/2026-10-18/index.html">HTML报告</a></p>
+<p>真实摄像头：已尝试启动，内置浏览器未取得视频流，尚未验收；用户需要在本机浏览器/系统确认摄像头权限。合成图不是摄像头测试，不会据此宣称全部功能完成。</p>
+<h3>浏览器显示验收</h3>
+<p>内置浏览器完成60秒合成图测试并自动停止，共301帧、页面最终平均5.0 FPS；运行截图记录299帧时平均5.4 FPS。输出确由3090模型生成，不是预制视频。摄像头启动未取得视频流，需用户本机权限/设备确认，不能宣称真人摄像头验收通过。</p>
 </main></html>

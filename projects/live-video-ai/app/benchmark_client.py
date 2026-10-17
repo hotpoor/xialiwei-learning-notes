@@ -38,7 +38,7 @@ async def main():
         seconds=time.perf_counter()-started
         await ws.send(frame(0,'charcoal pencil portrait drawing, black and white, rough paper'));changed=json.loads(await ws.recv())
         if 'error' in changed: raise RuntimeError(changed['error'])
-    report={'input':'moving synthetic shapes','path':'Mac localhost through SSH to Windows/WSL GPU service','resolution':256,'frames':count,'seconds':round(seconds,3),'sequential_client_fps':round(count/seconds,2),'roundtrip_ms_median':round(statistics.median(latencies),2),'roundtrip_ms_p95':round(sorted(latencies)[int(.95*(len(latencies)-1))],2),'prompt_change_request':'passed','limitations':'No camera capture, browser decoding/rendering or screen scanout in this measurement.'}
+    report={'input':'moving synthetic shapes','path':'localhost WebSocket; record whether run on server or through SSH in accompanying report','resolution':256,'frames':count,'seconds':round(seconds,3),'sequential_client_fps':round(count/seconds,2),'roundtrip_ms_median':round(statistics.median(latencies),2),'roundtrip_ms_p95':round(sorted(latencies)[int(.95*(len(latencies)-1))],2),'prompt_change_request':'passed','limitations':'No camera capture, browser decoding/rendering or screen scanout in this measurement.'}
     out=Path('artifacts');out.mkdir(exist_ok=True);(out/'client-benchmark.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 

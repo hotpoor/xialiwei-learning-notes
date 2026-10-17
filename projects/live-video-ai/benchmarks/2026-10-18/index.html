@@ -1,0 +1,154 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 Live AI 实测</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>3090 第一版实测 · 2026-10-18</h1>
+<p><a href="index.html">打开HTML图表</a> · <a href="../../setup/README.md">返回搭建记录</a> · <a href="../../app/README.md">运行代码</a></p>
+<p>第一版已经完成本地模型单帧转换、连续图像流、HTTP/WebSocket和Mac通过SSH连接3090的测试。摄像头入口已实现，但本轮内置浏览器尚未取得摄像头视频流；不能把合成画面测试称为真实摄像头测试通过。</p>
+<p><img src="summary.svg" alt="实测概览"></p>
+<h2>测试配置</h2>
+<ul>
+<li>Windows 11 + WSL2 Ubuntu 22.04.5，RTX3090 24GB，驱动610.88。</li>
+<li>PyTorch 2.7.1+cu126，Diffusers 0.35.1，Transformers 4.56.2；<a href="environment.txt">完整隔离环境版本</a>。<code>pip check</code>通过。</li>
+<li>模型：SD-Turbo，固定官方修订 <code>b261bac6fd2cf515557d5d0707481eafa0485ec2</code>，fp16 safetensors。未上传权重、凭据或私人画面。</li>
+<li><code>num_inference_steps=2</code>、<code>strength=0.5</code>，有效去噪步数1；<code>guidance_scale=0</code>，随机种子42，最近提示词embedding缓存。</li>
+<li>未启用TensorRT、torch.compile或StreamDiffusion加速。该模型按单帧处理，不具备Lucy的视频时序建模。</li>
+<li>输入为移动合成图形，非真人摄像头。每种尺寸预热3帧，再连续处理至少30秒、至少60帧。</li>
+<li>未中断其他任务。测试前GPU已用1432 MiB、利用率3%、板卡功耗36.26W；共享机器环境，未保证绝对独占。</li>
+</ul>
+<h2>服务端连续处理</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th style="text-align:right">256×256</th>
+<th style="text-align:right">512×512</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实测帧数／时长</td>
+<td style="text-align:right">212／30.035秒</td>
+<td style="text-align:right">123／30.055秒</td>
+</tr>
+<tr>
+<td>服务端顺序处理FPS</td>
+<td style="text-align:right"><strong>7.06</strong></td>
+<td style="text-align:right"><strong>4.09</strong></td>
+</tr>
+<tr>
+<td>整帧耗时中位数</td>
+<td style="text-align:right">140.48 ms</td>
+<td style="text-align:right">244.84 ms</td>
+</tr>
+<tr>
+<td>整帧耗时P95</td>
+<td style="text-align:right">156.83 ms</td>
+<td style="text-align:right">278.11 ms</td>
+</tr>
+<tr>
+<td>模型耗时中位数</td>
+<td style="text-align:right">138.7 ms</td>
+<td style="text-align:right">240.7 ms</td>
+</tr>
+<tr>
+<td>PyTorch峰值已分配显存</td>
+<td style="text-align:right">2640.6 MiB（约2.58 GiB）</td>
+<td style="text-align:right">3096.8 MiB（约3.02 GiB）</td>
+</tr>
+<tr>
+<td>GPU板卡平均功耗</td>
+<td style="text-align:right">247.96 W</td>
+<td style="text-align:right">314.68 W</td>
+</tr>
+<tr>
+<td>功耗样本数</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">53</td>
+</tr>
+</tbody>
+</table>
+<p>服务端整帧耗时包含合成输入生成、JPEG/base64及<code>server.infer</code>，模型耗时不含输入JPEG解码和输出JPEG编码。两者均不包含摄像头、网络和浏览器显示。显存为本进程PyTorch allocator的峰值已分配量，不等于整卡占用或部署所需最小显存，仍要留出CUDA上下文、缓存和其他程序余量。</p>
+<h2>Mac → SSH → Windows/WSL WebSocket</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th style="text-align:right">256×256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实测帧数／时长</td>
+<td style="text-align:right">167／30.146秒</td>
+</tr>
+<tr>
+<td>顺序客户端处理FPS</td>
+<td style="text-align:right"><strong>5.54</strong></td>
+</tr>
+<tr>
+<td>往返耗时中位数／P95</td>
+<td style="text-align:right">174.01／235.95 ms</td>
+</tr>
+<tr>
+<td>提示词切换请求</td>
+<td style="text-align:right">成功返回结果</td>
+</tr>
+</tbody>
+</table>
+<p>客户端为Mac上的Python测试脚本，包含生成输入、发送、收取及Pillow尺寸校验；不包含浏览器解码绘制、摄像头采集或屏幕扫描。因此也不是完整glass-to-glass延迟。浏览器实测另列在下方，不能与服务端FPS混用。</p>
+<h2>浏览器与摄像头状态</h2>
+<ul>
+<li><code>http://127.0.0.1:8767</code> 已通过SSH隧道访问到自有3090服务，健康状态为ready。</li>
+<li>页面提供摄像头入口、提示词应用、强度与尺寸选择、累计帧数、当前及平均显示FPS。</li>
+<li>摄像头启动尚未取得视频流，需要在本机浏览器/系统完成权限确认。本轮不记录或上传真人画面。</li>
+<li>浏览器60秒合成图测试自动结束，共301帧，页面最终显示平均 <strong>5.0 FPS</strong>。运行中截图为299帧、平均5.4 FPS；后段有波动，不能挑选更快瞬间作为最终成绩。浏览器可见性、截图和共享负载均可能影响显示帧率。</li>
+</ul>
+<p><img src="browser-synthetic.png" alt="浏览器合成图运行截图，299帧时"></p>
+<p><a href="browser-observation.json">浏览器观察记录</a></p>
+<h2>成本：实测部分与未知部分</h2>
+<table>
+<thead>
+<tr>
+<th>口径</th>
+<th style="text-align:right">256×256</th>
+<th style="text-align:right">512×512</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>板卡平均功率折算持续1小时</td>
+<td style="text-align:right">约0.248度电</td>
+<td style="text-align:right">约0.315度电</td>
+</tr>
+<tr>
+<td>示例电价0.6元／度时</td>
+<td style="text-align:right">约0.15元／小时</td>
+<td style="text-align:right">约0.19元／小时</td>
+</tr>
+<tr>
+<td>示例电价1元／度时</td>
+<td style="text-align:right">约0.25元／小时</td>
+<td style="text-align:right">约0.31元／小时</td>
+</tr>
+</tbody>
+</table>
+<p>上述功耗对应服务端满速连续推理负载，不是浏览器或摄像头低负载模式的独立用电测量。上面两个电价只是计算示例，未核实用户实际电价。功耗来自nvidia-smi采样均值，不是插座电表；包含整张GPU板卡当时的用电，不是严格归属于本程序的独立计量。CPU、内存、主板、硬盘、风扇和电源转换损耗均未计入，因此不能称为整机成本。</p>
+<p>已有3090本地运行不产生新的云GPU租金。完整成本还需加：整机实测电费、设备折旧、运行空闲时间、网络与维护。折旧公式为“可摊销设备成本 ÷ 累计使用小时数”，尚未取得这些输入，不编造总成本或毛利。</p>
+<p>云租赁对照：截至2026-10-18，Runpod公开列出3090约$0.50／GPU小时。此处是租价参照，并未租用云GPU；不保证该实例有同样的端到端表现，也不代表Lucy/Delulu的运行成本。<a href="https://www.runpod.io/pricing">Runpod官方价格</a></p>
+<p>原始报告中<code>idle_gpu_board_watts_mean=129.01</code>来自模型加载后仅3秒的预采样窗口，不是稳定空闲功耗，不能据此计算程序增量耗电或待机电费。</p>
+<h2>首次安装与启动问题</h2>
+<p>依赖已安装并验证CUDA矩阵计算。官方权重下载约2.4 GiB，遇到网络超时与一个组件下载中断；保留缓存续传后全部完成。本机也尝试分块下载，但同样受带宽限制，最终使用远端官方缓存；未把本机未完成下载记作哈希校验通过。</p>
+<p>随后在离线模式下成功加载本地缓存。第一次单帧模型耗时为7573.9 ms，接着255.7 ms、152.2 ms；首次启动还有本地组件读取等待，均未混入稳定帧率。冷启动与稳定运行需要分别评估。</p>
+<p>服务以WSL transient systemd单元<code>liveai-style-v1.service</code>运行，脱离SSH安装进程；只绑定localhost，无公网监听。WSL关闭后需要重新启动，未设置开机自启。Mac访问仍依赖SSH隧道。</p>
+<h2>后续验证</h2>
+<ol>
+<li>在用户本机确认摄像头权限，测真人画面的显示FPS与连续性，不公开上传私人画面。</li>
+<li>当前基线约5～7 FPS，距离流畅30 FPS还有差距；下一阶段再对比加速路径和时序稳定性。</li>
+<li>若需要完整电费，接插座功率计，记录待机与运行功率及实际电价；若需要总成本，再加入折旧和维护。</li>
+</ol>
+<p><a href="benchmark.json">原始服务端数据</a> · <a href="client-benchmark.json">原始客户端数据</a> · <a href="smoke-result.json">单帧结果</a></p>
+<h2>合成输入与输出</h2>
+<p>下图只用于证明本地推理与画面变化，不证明真人效果或身份一致性。256和512动态测试最后一帧的运动位置不同，不能当作严格同帧画质对比。</p>
+<p><img src="synthetic-input.png" alt="合成输入"></p>
+<p><img src="benchmark-256.png" alt="256输出"></p>
+<p><img src="benchmark-512.png" alt="512输出"></p>
+<h2>补充验证</h2>
+<p>HTTP <code>/api/frame</code> 已实际返回256×256图像；WebSocket与提示词切换已验证。安装SSH命令退出后，systemd服务仍为active/running，监听地址仅127.0.0.1:8767。三个fp16主权重在3090主机计算的SHA256均与官方LFS摘要一致。<a href="verification.json">验证记录</a></p>
+</main></html>
