@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROC 与 AUC · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>AUC、阈值与概率：三个不同的问题</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：已讲解，练习待回答</li>
+<li>状态：练习已答对（2026-10-18）</li>
 <li><a href="auc-ranking.md">上一节</a> · <a href="auc-threshold.html">HTML 图解版</a></li>
 </ul>
 <h2>1. 相同 AUC，不同预测结果</h2>
@@ -34,11 +34,22 @@
 </table>
 <p>例如，模型给很多瓜预测“坏瓜概率约 80%”，如果这些瓜中实际约 80% 是坏瓜，说明它在这一概率范围的校准较好。不能根据一个瓜判断校准，也不能仅凭 AUC 判断概率准不准。</p>
 <p>AUC 只依赖分数的相对排序；严格递增的变换保持排序与同分关系，所以保持 AUC，却可能改变某个固定数值阈值下的分类结果。</p>
-<h2>3. 小练习（待回答）</h2>
+<h2>3. 小练习（已答对）</h2>
 <p>只针对图中的四个瓜：把模型 B 的阈值从 0.5 降到 0.3，分数大于或等于阈值即报出。</p>
 <ol>
 <li>会报出哪些瓜？</li>
 <li>查全率与假正例率分别是多少？</li>
 <li>AUC 会改变吗？（模型分数保持不变，只调整判断阈值。）</li>
 </ol>
-<p>选择阈值属于模型方案选择，通常使用验证集；不要反复根据最终测试集挑阈值。</p></main></html>
+<p>选择阈值属于模型方案选择，通常使用验证集；不要反复根据最终测试集挑阈值。</p>
+<h3>学习者回答与反馈</h3>
+<p>回答：报出两个坏瓜，查全率 100%，假正例率 0%，AUC 不变，仍为 1。</p>
+<p>反馈：全部正确。只调整阈值，没有改变用于计算 ROC-AUC 的分数及其排序，因此 AUC 不变。</p>
+<h2>4. ROC 与 AUC 是评估工具</h2>
+<p>学习者进一步提出：这些指标只是工具。这里将对话中的“AOC”按上下文理解为“ROC”。</p>
+<ul>
+<li>ROC 是描述不同阈值下真正例率与假正例率关系的曲线。</li>
+<li>AUC 是该 ROC 曲线下的面积，用一个数概括整体排序能力。</li>
+<li>它们不直接决定模型能否使用。选择还需结合漏检、误报代价，目标查全率和复查能力等约束。</li>
+<li>AUC 高不等于任意阈值下都好，也不等于概率准确；满足真实任务要求才是评价的目的。</li>
+</ul></main></html>
