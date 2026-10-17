@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>非对称错误代价 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>补充应用：高估与低估代价不同</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：已讲解，练习待回答</li>
+<li>状态：练习已答对（2026-10-18）</li>
 <li>这是性能度量的应用补充，不代表原书新增章节。</li>
 <li><a href="mae-vs-mse.md">上一节：MAE 与 MSE</a> · <a href="asymmetric-cost.html">HTML 图解版</a></li>
 </ul>
@@ -17,7 +17,7 @@
 </code></pre>
 <p>式中的 10 与 2 的单位是元/kg；e 的单位是 kg。e=0 时损失为 0。这里假设损失随误差大小分段线性增长；实际任务应根据真实代价定义。</p>
 <p>评价标准应事先明确，用验证集选择模型与方案，保留测试集评估最终结果。也可把这样的损失用于训练；本节先只讨论评价。</p>
-<h2>3. 练习（待回答）</h2>
+<h2>3. 练习（已答对）</h2>
 <p>两个包裹实际都为 5 kg：</p>
 <table>
 <thead>
@@ -45,4 +45,38 @@
 <li>E、F 的 MAE 分别是多少？</li>
 <li>E、F 的平均成本分别是多少？</li>
 <li>按 MAE 与按平均成本，选择是否相同？</li>
-</ol></main></html>
+</ol>
+<h3>学习者回答与反馈</h3>
+<p>E 的 MAE 为 0.5 kg，平均成本为 5 元；F 的 MAE 为 1 kg，平均成本为 2 元。因此按 MAE 选 E，按平均成本选 F。反馈：计算与解释全部正确。</p>
+<h2>4. 结果对照</h2>
+<p><figure aria-label="MAE 与实际成本对照"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="550" viewBox="0 0 1080 550"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:23px}.sm{font-size:20px}</style><rect width="1080" height="550" fill="#f3f6fb"/><text x="45" y="60" class="h">你的计算结果：误差更小，不一定成本更低</text><text x="45" y="105" class="sm">低估 1 kg 损失 10 元｜高估 1 kg 损失 2 元｜实际重量均为 5 kg</text><rect x="40" y="135" width="1000" height="235" rx="16" fill="white"/><text x="75" y="185" class="t">模型</text><text x="260" y="185" class="t">误差（kg）</text><text x="540" y="185" class="t">MAE（kg）</text><text x="790" y="185" class="t">平均成本（元）</text><path d="M65 210H1015 M65 285H1015" stroke="#dce3ed"/><text x="75" y="260" class="t">E</text><text x="260" y="260" class="t">−1、0</text><text x="540" y="260" class="t">0.5 ← 更小</text><text x="790" y="260" class="t">5</text><text x="75" y="337" class="t">F</text><text x="260" y="337" class="t">+1、+1</text><text x="540" y="337" class="t">1</text><text x="790" y="337" class="t">2 ← 更低</text><rect x="40" y="395" width="1000" height="110" rx="16" fill="#e0f2eb"/><text x="65" y="440" class="h">按 MAE 选 E；按题设实际成本选 F。</text><text x="65" y="479" class="sm">先明确任务目标与错误代价，再确定评价指标。</text></svg></figure></p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>误差 kg</th>
+<th>MAE kg</th>
+<th>两次损失 元</th>
+<th>平均成本 元</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E</td>
+<td>-1、0</td>
+<td>0.5</td>
+<td>10、0</td>
+<td>5</td>
+</tr>
+<tr>
+<td>F</td>
+<td>+1、+1</td>
+<td>1</td>
+<td>2、2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>结论：指标选择要体现真实任务的代价；平均误差较小，不一定意味着实际损失较小。此结论仅比较题设中的数据与成本规则。</p>
+<h3>衔接：评估结果是否稳定（待讨论）</h3>
+<p>同一任务中，模型 A、B 在某次留出的测试数据上准确率分别为 91%、90%。仅凭这一次结果，能否断定 A 在未来数据上一定更好？后续返回第二章的评估方法与比较检验。</p></main></html>
