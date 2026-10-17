@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI · 第一步主机检查</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 搭建记录</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
 <p>日期：2026-10-18。<a href="../README.md">返回目标路线</a></p>
 <h2>已确认的第一版范围</h2>
 <ul>
@@ -10,7 +10,7 @@
 <li>第一轮优先同一台Windows机器的浏览器localhost与摄像头跑通，减少跨机器网络与摄像头访问变量；之后再接Mac摄像头。摄像头接在哪台机器尚待执行阶段确认，不能当作已有事实。</li>
 </ul>
 <p>SD-Turbo支持少步推理，其官方模型卡偏好512×512。较低分辨率可能牺牲语义与人物质量，需实际对比。<a href="https://huggingface.co/stabilityai/sd-turbo">官方模型卡</a></p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="510" viewBox="0 0 1080 510"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="510" fill="#f3f6fb"/><text x="40" y="55" class="h">第一版按 256 × 256 推进</text><rect x="40" y="90" width="1000" height="155" rx="16" fill="white"/><text x="65" y="135" class="t">摄像头 → 裁剪/缩放 → 模型推理 → 256 × 256 显示</text><text x="65" y="180" class="sm">推理尺寸：256 × 256 实验 / 512 × 512 参考，需要实际比较</text><text x="65" y="218" class="sm">显示缩小不等于推理加速；本机真实帧率尚未测得。</text><rect x="40" y="270" width="1000" height="190" rx="16" fill="#e0f2eb"/><text x="65" y="315" class="h">已通过 SSH 检查主机，正在安装推理环境</text><text x="65" y="360" class="t">Windows版本 · NVIDIA驱动 · WSL版本 · 发行版是否为WSL2</text><text x="65" y="407" class="sm">检查结果返回后 → 验证GPU → 隔离环境 → 单帧 → 摄像头连续输出</text></svg></p>
+<p><img src="step-01.svg" alt="第一步与画面尺寸"></p>
 <h2>当前进度</h2>
 <table>
 <thead>
@@ -34,17 +34,17 @@
 <tr>
 <td>2</td>
 <td>验证WSL2中的GPU访问</td>
-<td>WSL内nvidia-smi已通过，PyTorch计算待安装后验证</td>
+<td>nvidia-smi与PyTorch CUDA矩阵计算均已通过</td>
 </tr>
 <tr>
 <td>3</td>
 <td>建立隔离Python环境并固定依赖版本</td>
-<td>独立venv已创建，依赖安装中</td>
+<td>已完成；PyTorch 2.7.1+cu126、Diffusers 0.35.1、Transformers 4.56.2</td>
 </tr>
 <tr>
 <td>4</td>
 <td>下载预训练模型，验证单帧转换</td>
-<td>未执行</td>
+<td>正在下载官方固定版本权重，单帧待运行</td>
 </tr>
 <tr>
 <td>5</td>
@@ -165,4 +165,9 @@ wsl --list --verbose
 </ul>
 <h3>当前安装任务</h3>
 <p>依赖安装运行在已保持连接的SSH会话内，日志位于WSL项目目录的 <code>install.log</code>。已下载部分CUDA组件，整体安装仍在进行中；尚未取得PyTorch计算通过结果。后续继续从此处检查日志，不重复建立环境。后台启动方式在SSH退出后未继续执行，已改为保持SSH连接的前台安装；没有把首次启动当作安装成功。</p>
-<p><a href="../app/index.html">操作页源码</a>目前只完成界面检查，未连接模型时显示服务未连接并禁用摄像头启动；不展示伪造帧率。</p></main></html>
+<p><a href="../app/index.html">操作页源码</a>目前只完成界面检查，未连接模型时显示服务未连接并禁用摄像头启动；不展示伪造帧率。</p>
+<h3>CUDA计算验证通过</h3>
+<p>实际运行 <code>verify_cuda.py</code>：PyTorch <code>2.7.1+cu126</code>、CUDA运行时12.6、RTX3090，矩阵运算通过。检查时空闲显存23227 MiB（瞬时值）。后续使用 <code>benchmark.py</code> 在模型预热后分别进行256和512合成动态图顺序推理，采样GPU板卡功耗。服务器吞吐量、浏览器往返帧率和摄像头完整延迟分别标注，不混用；显卡功耗不冒充整机插座功耗。</p>
+<h3>依赖安装完成，开始权重下载</h3>
+<p>隔离环境安装完成，安装日志返回 <code>INSTALL_DONE</code>。首次加载从官方Hugging Face仓库下载固定版本SD-Turbo，fp16主权重合计约2.4 GiB；远端下载出现读超时后断点续传。同时尝试通过Mac下载同一官方版本、核对LFS SHA256后经SSH传输，避免改用来源不明的模型。权重不提交到公开仓库。</p>
+</main></html>
