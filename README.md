@@ -6,4 +6,10 @@
 
 | 书籍 | 作者 | 状态 | 笔记 |
 | --- | --- | --- | --- |
-| 《机器学习》（西瓜书） | 周志华 | 待开始 | [阅读记录](books/机器学习-周志华/README.md) |
+| 《机器学习》（西瓜书） | 周志华 | 学习中 | [阅读记录](books/机器学习-周志华/README.md) |
+
+## 当前实践方向
+
+[实时 Live AI 视频编辑：目标与硬件路线](projects/live-video-ai/README.md) · [HTML图解](projects/live-video-ai/index.html)
+
+目标：先以现有3090与M1 Max做摄像头实时视频编辑原型，再逐步训练；西瓜书作为基础参考。

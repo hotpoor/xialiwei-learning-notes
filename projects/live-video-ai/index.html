@@ -1,0 +1,117 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI · 目标与设备路线</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
+<p>记录日期：2026-10-18。状态：可行性评估与路线整理；尚未部署、下载权重或实测。本文不是 Decart 内部架构的复现说明。</p>
+<p><a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
+<h2>1. 已确认的目标与设备</h2>
+<ul>
+<li>目标：Lucy 类——摄像头实时输入，结合提示词改变人物、场景或风格；暂不以 Oasis 类可交互世界为主线。</li>
+<li>策略：先用现有模型做出效果，再逐步训练自己的适配能力。</li>
+<li>已有：一张 RTX 3090；两台 M1 Max，每台 64GB；3090 主机运行 Windows，可使用 WSL2。</li>
+<li>DGX Spark：用户询问其可能性，尚未确认已拥有、具体配置或采购意图。</li>
+<li>偏好：理解与正确运用优先，AI/代码辅助计算，SVG/Markdown/HTML 记录，选择题巩固。</li>
+</ul>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1010" viewBox="0 0 1100 1010"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1100" height="1010" fill="#f3f6fb"/><text x="40" y="55" class="h">Live AI：先做实时视频编辑，再逐步训练</text><text x="40" y="100" class="t">目标：摄像头输入 + 提示词 → 改人物、场景或风格（Lucy 类）</text><rect x="40" y="135" width="1020" height="240" rx="16" fill="white"/><text x="65" y="180" class="h">第一版建议：先用现有设备建立实测基线</text><rect x="65" y="210" width="280" height="90" rx="12" fill="#e0f2eb"/><text x="85" y="246" class="t">M1 Max / 浏览器</text><text x="85" y="278" class="sm">摄像头 · 提示词 · 显示</text><text x="365" y="262" class="h">→</text><rect x="415" y="210" width="300" height="90" rx="12" fill="#e5edf9"/><text x="435" y="246" class="t">3090 · Windows + WSL2</text><text x="435" y="278" class="sm">CUDA 推理服务 · 返回画面</text><text x="740" y="262" class="h">→</text><rect x="790" y="210" width="245" height="90" rx="12" fill="#e0f2eb"/><text x="810" y="246" class="t">Mac 浏览器</text><text x="810" y="278" class="sm">查看编辑后的视频</text><text x="65" y="344" class="sm">这是分工架构，不是把三台设备的内存合并；尚未部署或测得帧率。</text><rect x="40" y="400" width="1020" height="245" rx="16" fill="white"/><text x="65" y="445" class="h">DGX Spark 和笔记本怎么定位？</text><text x="65" y="492" class="t">DGX Spark：可探索本地扩散/视频推理，实时能力与 ARM 依赖需验证。</text><text x="65" y="539" class="t">M1 Max 本地：部分扩散可用 MPS；CUDA 方案不能原样照搬。</text><text x="65" y="586" class="t">笔记本做前端：可把摄像头画面交给 3090 或 Spark 推理。</text><text x="65" y="622" class="sm">加载得下 ≠ 运行得快 ≠ 交互延迟低 ≠ 画面连续稳定。</text><rect x="40" y="670" width="1020" height="285" rx="16" fill="#e0f2eb"/><text x="65" y="715" class="h">按成果推进，而不是先把全书学完</text><text x="65" y="762" class="t">1. 预训练模型跑通单帧 → 连续输入、连续输出、可切提示词</text><text x="65" y="809" class="t">2. 测首帧等待 / 端到端延迟 / 有效 FPS / 闪烁与动作保留</text><text x="65" y="856" class="t">3. 对比图像流基线与流式视频模型，找出真正瓶颈</text><text x="65" y="903" class="t">4. 再做小范围 LoRA / 微调；时序与低延迟问题分别解决</text></svg></p>
+<h2>2. 核心判断</h2>
+<p>可以用现有设备开始原型；这不构成达到 Lucy 商用画质、帧率和延迟的承诺。把视频输入接到已有模型、基于模型微调、从零训练基础模型，是不同规模的工作。</p>
+<p>Decart 当前公开的 Lucy 实时能力是根据指令编辑直播视频；其产品接口与 SDK 不等于公开全部实时模型权重、训练细节。<a href="https://docs.platform.decart.ai/models/realtime/lucy-2.5">Lucy 官方文档</a></p>
+<h2>3. 硬件定位</h2>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>对当前任务的判断</th>
+<th>主要待验证项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>现有3090 + Windows/WSL2</td>
+<td>建议作为第一阶段推理主机，优先建立低分辨率原型；适合探索部分小范围微调</td>
+<td>Windows/WSL与驱动版本、空闲显存、RAM、磁盘、模型与扩展的兼容、实际速度</td>
+</tr>
+<tr>
+<td>DGX Spark</td>
+<td>有官方图像/视频扩散运行路径，可作为候选；尚无本项目的实时实测</td>
+<td>ARM64软件包与CUDA扩展、Blackwell适配、模型精度、实际延迟与画质</td>
+</tr>
+<tr>
+<td>M1 Max 64GB纯本地</td>
+<td>部分扩散流程可通过MPS运行；不承诺现成CUDA流式视频项目可原样运行或达到Lucy体验</td>
+<td>算子与后端支持、所选模型内存占用、延迟、长期散热与吞吐</td>
+</tr>
+<tr>
+<td>M1 Max作为客户端</td>
+<td>推荐用于摄像头、提示词与结果展示，推理放3090；另一台可做数据整理与评估</td>
+<td>网络时延、视频传输、前后端访问方式</td>
+</tr>
+<tr>
+<td>NVIDIA独显笔记本</td>
+<td>部分轻量方案有可能；须按具体GPU/显存/功耗与模型判断</td>
+<td>显存是否足够、驱动、散热、功耗限制；不能按桌面同名卡推算</td>
+</tr>
+</tbody>
+</table>
+<p>3090 的官方显存为24GB；用户机器的可用显存仍需实际检查。<a href="https://www.nvidia.com/en-eu/geforce/graphics-cards/30-series/rtx-3090/">NVIDIA 3090规格</a></p>
+<p>以128GB版DGX Spark为例，官方列出128GB统一内存、273GB/s带宽与Arm CPU。统一内存容量有助于容纳模型，但不能据此推出比3090更快，也不能把FP4峰值直接当成FP16视频模型性能。<a href="https://docs.nvidia.com/dgx/dgx-spark/hardware.html">Spark硬件说明</a></p>
+<p>NVIDIA提供Spark上ComfyUI图像与视频生成流程，这证明存在运行路径，不代表该工作流实时输出摄像头编辑。<a href="https://build.nvidia.com/spark/comfyui/video-gen-workflow">官方视频生成流程</a></p>
+<p>Spark的Arm平台可能需要兼容镜像或重新编译扩展；x86_64二进制包不能按原样通用。<a href="https://docs.nvidia.com/dgx/dgx-spark-porting-guide/overview.html">Spark移植指南</a></p>
+<p>Diffusers提供Apple Silicon MPS运行方式，但这不保证所有视频模型、第三方CUDA加速项目支持MPS。<a href="https://huggingface.co/docs/diffusers/optimization/mps">Diffusers MPS文档</a></p>
+<h2>4. 第一版系统分工</h2>
+<pre><code class="language-text">Mac浏览器摄像头 + 提示词
+        ↓ 视频输入与控制
+Windows主机 / WSL2中的3090推理服务
+        ↓ 编辑后的视频
+Mac浏览器显示与交互
+</code></pre>
+<p>这是工程分工建议，不是多机显存拼接。先不让两台Mac参与同一模型的逐层推理，避免一开始引入跨设备通信复杂度。WSL2对CUDA有官方支持；Windows主机驱动与WSL内开发环境按官方方式配置，不能在WSL里另装Linux显示驱动。<a href="https://docs.nvidia.com/cuda/wsl-user-guide/index.html">CUDA on WSL官方说明</a></p>
+<p>实际联网部署时再检查摄像头访问、网络路由与安全上下文；这些目前尚未操作。</p>
+<h2>5. 候选技术路线</h2>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>作用</th>
+<th>边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>StreamDiffusion + 小型预训练图像模型</td>
+<td>建立摄像头连续图像变换、提示词控制、测延迟的轻量基线</td>
+<td>图像流不自动等于时序稳定的视频模型；优先风格变换，不承诺精确换人换衣</td>
+</tr>
+<tr>
+<td>StreamV2V</td>
+<td>研究利用过去帧特征提高连续性</td>
+<td>论文中的GPU测试不能直接套到3090或Spark</td>
+</tr>
+<tr>
+<td>StreamDiffusionV2 1.3B路线</td>
+<td>进一步评估因果视频模型与流式缓存</td>
+<td>官方前提为Linux/NVIDIA；3090、WSL2、Spark实际兼容性与速度待测</td>
+</tr>
+<tr>
+<td>Lucy API（可选参考）</td>
+<td>用作质量参考或快速产品对照</td>
+<td>外部推理服务，不是拥有自己的模型；费用与接入在真正采用前确认</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/cumulo-autumn/StreamDiffusion">StreamDiffusion官方代码</a>提供摄像头/屏幕img2img示例；其4090基准不是3090端到端帧率。</p>
+<p><a href="https://arxiv.org/abs/2405.15757">StreamV2V论文</a>使用过去帧特征库处理流式视频一致性。</p>
+<p><a href="https://github.com/chenfengxu714/StreamDiffusionV2">StreamDiffusionV2官方代码</a>提供1.3B、14B相关配置和在线demo；本项目优先检查小模型而不是直接选择14B。项目页的多卡H100成绩不能当作单张3090、Spark或M1的成绩。<a href="https://streamdiffusionv2.github.io/">V2项目页</a></p>
+<h2>6. 第一阶段验收</h2>
+<p>先以约512级低分辨率、单路摄像头、风格变换为起点；它是建议试验设置，不是最终规格或已确认性能。</p>
+<ul>
+<li>能加载模型并完成单帧变换；再接连续视频。</li>
+<li>提示词改变时，能看到输出变化，动作仍可辨认。</li>
+<li>记录首帧等待时间、端到端延迟p50/p95、有效推理FPS与输出帧年龄，而非只看播放器刷新率。</li>
+<li>检查闪烁、身份与姿态保留、快速动作、遮挡、切换提示词后的恢复。</li>
+<li>长时间运行后观察队列是否越积越长、显存是否持续上涨。</li>
+<li>同一组固定录制样本与提示词用于对比，另用未参与调参的测试片段验证。</li>
+</ul>
+<p>FPS高不一定延迟低；批处理可能提高吞吐，却让画面滞后。逐像素MSE低也不代表编辑成功：完全不改输入可能获得低差异，却违背提示词。</p>
+<h2>7. 后续训练与学习</h2>
+<p>先发现具体失败点，再决定训练目标。风格/角色的图像LoRA可作为较小的第一步，但它不自动解决时序闪烁、长期一致性或推理速度。视频微调、蒸馏与因果缓存需分别研究，不能承诺所有方法均在24GB显存下可训练。</p>
+<p>学习主线改为：张量和神经网络直觉 → 图像扩散与条件控制 → 视频时序一致性 → 流式推理/缓存/队列 → 数据与小范围训练 → 任务评估。西瓜书保留作泛化、数据边界、优化与评价的基础参考，不要求先学完整本书或熟练手算指标。</p>
+<h2>8. 下一步</h2>
+<p>先检查3090主机的Windows版本、WSL2、GPU驱动、CUDA可见性、RAM与空闲磁盘，再冻结具体模型和依赖版本。本轮仅完成资料核对与路线记录；尚未连接该机器，不虚构检查结果。</p></main></html>
