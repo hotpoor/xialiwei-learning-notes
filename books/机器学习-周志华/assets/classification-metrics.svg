@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1120" viewBox="0 0 1100 1120">
+<style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#172b4d} .title{font-size:30px;font-weight:700}.h{font-size:22px;font-weight:600}.t{font-size:20px}.small{font-size:17px}.num{font-size:32px;font-weight:700}.muted{fill:#52657b}</style>
+<rect width="1100" height="1120" fill="#f5f7fb"/>
+<text x="50" y="58" class="title">用一批西瓜，看懂分类指标</text>
+<text x="50" y="94" class="t muted">共 1,000 个瓜：100 个坏瓜 + 900 个好瓜｜目标：找出坏瓜（正类）</text>
+<rect x="50" y="120" width="1000" height="300" rx="16" fill="white"/>
+<path d="M50 190H1050 M50 305H1050 M320 120V420 M685 120V420" stroke="#dce3ed" stroke-width="2"/>
+<text x="185" y="164" text-anchor="middle" class="h">实际情况 ↓</text><text x="502" y="164" text-anchor="middle" class="h">预测：坏瓜（报出）</text><text x="868" y="164" text-anchor="middle" class="h">预测：好瓜（放行）</text>
+<rect x="321" y="191" width="363" height="113" fill="#e6f6ed"/><rect x="686" y="191" width="363" height="113" fill="#fff0e6"/><rect x="321" y="306" width="363" height="113" fill="#fff0e6"/>
+<text x="185" y="255" text-anchor="middle" class="h">实际坏瓜：100</text><text x="185" y="368" text-anchor="middle" class="h">实际好瓜：900</text>
+<text x="502" y="239" text-anchor="middle" class="num">90</text><text x="502" y="277" text-anchor="middle" class="t">TP · 正确找出</text>
+<text x="868" y="239" text-anchor="middle" class="num">10</text><text x="868" y="277" text-anchor="middle" class="t">FN · 漏检</text>
+<text x="502" y="354" text-anchor="middle" class="num">180</text><text x="502" y="392" text-anchor="middle" class="t">FP · 误报</text>
+<text x="868" y="354" text-anchor="middle" class="num">720</text><text x="868" y="392" text-anchor="middle" class="t">TN · 正确放行</text>
+<rect x="50" y="445" width="1000" height="215" rx="16" fill="white"/>
+<text x="75" y="482" class="h">三个指标，关键看“分母是谁”</text>
+<text x="75" y="528" class="t">查准率 Precision</text><text x="330" y="528" class="t">90 ÷ (90 + 180) = 33.3%</text><text x="720" y="528" class="small muted">报出的 270 个瓜中，多少真坏？</text>
+<text x="75" y="579" class="t">查全率 Recall / TPR</text><text x="330" y="579" class="t">90 ÷ (90 + 10) = 90%</text><text x="720" y="579" class="small muted">实际 100 个坏瓜中，找到多少？</text>
+<text x="75" y="630" class="t">假正例率 FPR</text><text x="330" y="630" class="t">180 ÷ (180 + 720) = 20%</text><text x="720" y="630" class="small muted">实际 900 个好瓜中，误报多少？</text>
+<rect x="50" y="685" width="1000" height="385" rx="16" fill="white"/>
+<text x="75" y="725" class="h">把查全率和假正例率放到 ROC 图上</text>
+<path d="M150 990H490 M150 990V770" fill="none" stroke="#52657b" stroke-width="2"/>
+<path d="M150 770H490 M490 770V990" fill="none" stroke="#e1e7ef"/>
+<path d="M150 990L490 770" stroke="#b9c5d4" stroke-dasharray="6 6"/>
+<path d="M218 990V792H150" fill="none" stroke="#167a66" stroke-dasharray="5 5"/>
+<circle cx="218" cy="792" r="7" fill="#167a66"/>
+<text x="234" y="817" class="t" style="fill:#167a66">当前模型：(20%, 90%)</text>
+<circle cx="150" cy="770" r="5" fill="#326fe3"/>
+<text x="165" y="760" class="small" style="fill:#326fe3">理想位置：不误报、全找出</text>
+<text x="135" y="1016" class="small">0</text><text x="474" y="1016" class="small">100%</text><text x="85" y="777" class="small">100%</text>
+<text x="230" y="1048" class="small">假正例率 FPR →</text><text x="78" y="850" class="small" transform="rotate(-90 78 850)">查全率 TPR →</text>
+<text x="600" y="790" class="h">一个阈值 → 图上的一个点</text>
+<text x="600" y="835" class="t">改变阈值 → 得到更多点 → ROC 曲线</text>
+<text x="600" y="880" class="t">AUC → 整条 ROC 曲线下方的面积</text>
+<text x="600" y="945" class="h" style="fill:#b05c23">AUC = 0.95 ≠ 查全率 = 95%</text>
+<text x="600" y="985" class="t muted">AUC 看整体排序能力；</text><text x="600" y="1018" class="t muted">查全率看某个阈值下找出了多少。</text>
+</svg>

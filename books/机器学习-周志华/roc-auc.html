@@ -1,0 +1,187 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROC 与 AUC · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>ROC 与 AUC：用西瓜例子理解</h1>
+<ul>
+<li>学习日期：2026-10-17</li>
+<li>状态：已学习基础概念，待继续练习</li>
+<li><a href="roc-auc.html">浏览器版</a> · <a href="02-模型评估与选择.md">返回第二章</a></li>
+</ul>
+<h2>1. 先明确目标与指标</h2>
+<p>把坏瓜作为正类，模型分数越高，越认为它是坏瓜。分数不一定是校准过的概率。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查准率 Precision</td>
+<td>TP / (TP + FP)</td>
+<td>报出的瓜中，有多少真是坏瓜</td>
+</tr>
+<tr>
+<td>查全率 Recall / TPR</td>
+<td>TP / (TP + FN)</td>
+<td>实际坏瓜中，找出了多少</td>
+</tr>
+<tr>
+<td>假正例率 FPR</td>
+<td>FP / (FP + TN)</td>
+<td>实际好瓜中，误报了多少</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>2 × Precision × Recall / (Precision + Recall)</td>
+<td>同时考虑查准率和查全率</td>
+</tr>
+</tbody>
+</table>
+<p>TP：正确找出的坏瓜；FN：漏掉的坏瓜；FP：误报的好瓜；TN：正确放行的好瓜。上述比率要求分母非零。</p>
+<p><figure aria-label="混淆矩阵、分类指标与 ROC 坐标"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1120" viewBox="0 0 1100 1120">
+<style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#172b4d} .title{font-size:30px;font-weight:700}.h{font-size:22px;font-weight:600}.t{font-size:20px}.small{font-size:17px}.num{font-size:32px;font-weight:700}.muted{fill:#52657b}</style>
+<rect width="1100" height="1120" fill="#f5f7fb"/>
+<text x="50" y="58" class="title">用一批西瓜，看懂分类指标</text>
+<text x="50" y="94" class="t muted">共 1,000 个瓜：100 个坏瓜 + 900 个好瓜｜目标：找出坏瓜（正类）</text>
+<rect x="50" y="120" width="1000" height="300" rx="16" fill="white"/>
+<path d="M50 190H1050 M50 305H1050 M320 120V420 M685 120V420" stroke="#dce3ed" stroke-width="2"/>
+<text x="185" y="164" text-anchor="middle" class="h">实际情况 ↓</text><text x="502" y="164" text-anchor="middle" class="h">预测：坏瓜（报出）</text><text x="868" y="164" text-anchor="middle" class="h">预测：好瓜（放行）</text>
+<rect x="321" y="191" width="363" height="113" fill="#e6f6ed"/><rect x="686" y="191" width="363" height="113" fill="#fff0e6"/><rect x="321" y="306" width="363" height="113" fill="#fff0e6"/>
+<text x="185" y="255" text-anchor="middle" class="h">实际坏瓜：100</text><text x="185" y="368" text-anchor="middle" class="h">实际好瓜：900</text>
+<text x="502" y="239" text-anchor="middle" class="num">90</text><text x="502" y="277" text-anchor="middle" class="t">TP · 正确找出</text>
+<text x="868" y="239" text-anchor="middle" class="num">10</text><text x="868" y="277" text-anchor="middle" class="t">FN · 漏检</text>
+<text x="502" y="354" text-anchor="middle" class="num">180</text><text x="502" y="392" text-anchor="middle" class="t">FP · 误报</text>
+<text x="868" y="354" text-anchor="middle" class="num">720</text><text x="868" y="392" text-anchor="middle" class="t">TN · 正确放行</text>
+<rect x="50" y="445" width="1000" height="215" rx="16" fill="white"/>
+<text x="75" y="482" class="h">三个指标，关键看“分母是谁”</text>
+<text x="75" y="528" class="t">查准率 Precision</text><text x="330" y="528" class="t">90 ÷ (90 + 180) = 33.3%</text><text x="720" y="528" class="small muted">报出的 270 个瓜中，多少真坏？</text>
+<text x="75" y="579" class="t">查全率 Recall / TPR</text><text x="330" y="579" class="t">90 ÷ (90 + 10) = 90%</text><text x="720" y="579" class="small muted">实际 100 个坏瓜中，找到多少？</text>
+<text x="75" y="630" class="t">假正例率 FPR</text><text x="330" y="630" class="t">180 ÷ (180 + 720) = 20%</text><text x="720" y="630" class="small muted">实际 900 个好瓜中，误报多少？</text>
+<rect x="50" y="685" width="1000" height="385" rx="16" fill="white"/>
+<text x="75" y="725" class="h">把查全率和假正例率放到 ROC 图上</text>
+<path d="M150 990H490 M150 990V770" fill="none" stroke="#52657b" stroke-width="2"/>
+<path d="M150 770H490 M490 770V990" fill="none" stroke="#e1e7ef"/>
+<path d="M150 990L490 770" stroke="#b9c5d4" stroke-dasharray="6 6"/>
+<path d="M218 990V792H150" fill="none" stroke="#167a66" stroke-dasharray="5 5"/>
+<circle cx="218" cy="792" r="7" fill="#167a66"/>
+<text x="234" y="817" class="t" style="fill:#167a66">当前模型：(20%, 90%)</text>
+<circle cx="150" cy="770" r="5" fill="#326fe3"/>
+<text x="165" y="760" class="small" style="fill:#326fe3">理想位置：不误报、全找出</text>
+<text x="135" y="1016" class="small">0</text><text x="474" y="1016" class="small">100%</text><text x="85" y="777" class="small">100%</text>
+<text x="230" y="1048" class="small">假正例率 FPR →</text><text x="78" y="850" class="small" transform="rotate(-90 78 850)">查全率 TPR →</text>
+<text x="600" y="790" class="h">一个阈值 → 图上的一个点</text>
+<text x="600" y="835" class="t">改变阈值 → 得到更多点 → ROC 曲线</text>
+<text x="600" y="880" class="t">AUC → 整条 ROC 曲线下方的面积</text>
+<text x="600" y="945" class="h" style="fill:#b05c23">AUC = 0.95 ≠ 查全率 = 95%</text>
+<text x="600" y="985" class="t muted">AUC 看整体排序能力；</text><text x="600" y="1018" class="t muted">查全率看某个阈值下找出了多少。</text>
+</svg></figure></p>
+<h2>2. ROC 是怎样画出来的</h2>
+<p>预测规则：分数大于或等于阈值，就预测为坏瓜。逐渐降低阈值，依次计算 FPR 和 TPR，画在横轴为 FPR、纵轴为 TPR 的图上。</p>
+<ul>
+<li>全部预测为好瓜：点为 (0, 0)。</li>
+<li>全部预测为坏瓜：点为 (1, 1)。</li>
+<li>理想位置为左上角 (0, 1)：不误报好瓜，并找出全部坏瓜。</li>
+</ul>
+<h2>3. 四个瓜的完整计算</h2>
+<table>
+<thead>
+<tr>
+<th>瓜</th>
+<th>实际类别</th>
+<th>模型分数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>坏瓜</td>
+<td>0.9</td>
+</tr>
+<tr>
+<td>B</td>
+<td>好瓜</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>C</td>
+<td>坏瓜</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>D</td>
+<td>好瓜</td>
+<td>0.1</td>
+</tr>
+</tbody>
+</table>
+<p>按阈值下降，ROC 的点依次为：</p>
+<p>(0, 0) → (0, 0.5) → (0.5, 0.5) → (0.5, 1) → (1, 1)。</p>
+<p><figure aria-label="逐步画 ROC 并用面积法和配对法计算 AUC"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1330" viewBox="0 0 1100 1330">
+<style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.title{font-size:30px;font-weight:700}.h{font-size:23px;font-weight:600}.t{font-size:21px}.sm{font-size:18px}.m{fill:#5c6b80}.green{fill:#087d69}</style>
+<rect width="1100" height="1330" fill="#f3f6fb"/>
+<text x="45" y="55" class="title">AUC 怎么算？同一个例子，两种算法</text>
+<text x="45" y="94" class="t m">坏瓜为正类｜分数越高，越认为是坏瓜｜预测规则：分数 ≥ 阈值就报出</text>
+<rect x="40" y="120" width="1020" height="180" rx="16" fill="white"/>
+<text x="65" y="158" class="h">① 先把 4 个瓜按模型分数，从高到低排列</text>
+<text x="125" y="210" class="t">瓜 A：0.9</text><text x="375" y="210" class="t">瓜 B：0.8</text><text x="625" y="210" class="t">瓜 C：0.7</text><text x="875" y="210" class="t">瓜 D：0.1</text>
+<text x="125" y="254" class="h green">实际：坏</text><text x="375" y="254" class="h">实际：好</text><text x="625" y="254" class="h green">实际：坏</text><text x="875" y="254" class="h">实际：好</text>
+<rect x="40" y="320" width="1020" height="315" rx="16" fill="white"/>
+<text x="65" y="360" class="h">② 逐渐降低阈值，每次多报出一个瓜</text>
+<path d="M65 420H1035 M65 462H1035 M65 504H1035 M65 546H1035 M65 588H1035" stroke="#e1e7ef"/>
+<text x="80" y="402" class="sm m">阈值</text><text x="250" y="402" class="sm m">报出的瓜</text><text x="505" y="402" class="sm m">误报好瓜 / 2 = FPR</text><text x="795" y="402" class="sm m">找出坏瓜 / 2 = TPR</text>
+<text x="80" y="450" class="t">大于 0.9</text><text x="250" y="450" class="t">无</text><text x="540" y="450" class="t">0 / 2 = 0</text><text x="830" y="450" class="t">0 / 2 = 0</text>
+<text x="80" y="492" class="t">0.9</text><text x="250" y="492" class="t">A</text><text x="540" y="492" class="t">0 / 2 = 0</text><text x="830" y="492" class="t">1 / 2 = 0.5</text>
+<text x="80" y="534" class="t">0.8</text><text x="250" y="534" class="t">A、B</text><text x="540" y="534" class="t">1 / 2 = 0.5</text><text x="830" y="534" class="t">1 / 2 = 0.5</text>
+<text x="80" y="576" class="t">0.7</text><text x="250" y="576" class="t">A、B、C</text><text x="540" y="576" class="t">1 / 2 = 0.5</text><text x="830" y="576" class="t">2 / 2 = 1</text>
+<text x="80" y="618" class="t">0.1</text><text x="250" y="618" class="t">A、B、C、D</text><text x="540" y="618" class="t">2 / 2 = 1</text><text x="830" y="618" class="t">2 / 2 = 1</text>
+<rect x="40" y="655" width="1020" height="355" rx="16" fill="white"/>
+<text x="65" y="696" class="h">③ 把 (FPR, TPR) 画出来，计算曲线下的面积</text>
+<rect x="140" y="840" width="150" height="110" fill="#c2eadd"/><rect x="290" y="730" width="150" height="220" fill="#9ed8c5"/>
+<path d="M140 730V950H440" stroke="#54647a" fill="none" stroke-width="2"/>
+<path d="M140 950V840H290V730H440" stroke="#087d69" fill="none" stroke-width="4"/>
+<g fill="#087d69"><circle cx="140" cy="950" r="5"/><circle cx="140" cy="840" r="5"/><circle cx="290" cy="840" r="5"/><circle cx="290" cy="730" r="5"/><circle cx="440" cy="730" r="5"/></g>
+<text x="115" y="977" class="sm">0</text><text x="275" y="977" class="sm">0.5</text><text x="435" y="977" class="sm">1</text><text x="98" y="845" class="sm">0.5</text><text x="110" y="736" class="sm">1</text>
+<text x="195" y="903" class="h">0.25</text><text x="339" y="858" class="h">0.50</text><text x="450" y="955" class="sm">FPR →</text><text x="76" y="770" class="sm">TPR ↑</text>
+<text x="590" y="765" class="t">左侧面积 = 0.5 × 0.5 = 0.25</text><text x="590" y="810" class="t">右侧面积 = 0.5 × 1 = 0.50</text>
+<text x="590" y="870" class="title green">AUC = 0.25 + 0.50 = 0.75</text><text x="590" y="920" class="sm m">竖直线段没有宽度，不增加面积。</text><text x="590" y="952" class="sm m">坐标用 0～1 计算，整个正方形面积为 1。</text>
+<rect x="40" y="1030" width="1020" height="255" rx="16" fill="white"/>
+<text x="65" y="1070" class="h">④ 另一种算法：每个坏瓜，分别与每个好瓜比较分数</text>
+<text x="90" y="1120" class="t">A（坏，0.9）&gt; B（好，0.8） ✓</text><text x="590" y="1120" class="t">A（坏，0.9）&gt; D（好，0.1） ✓</text>
+<text x="90" y="1167" class="t">C（坏，0.7）&lt; B（好，0.8） ✗</text><text x="590" y="1167" class="t">C（坏，0.7）&gt; D（好，0.1） ✓</text>
+<text x="90" y="1230" class="h green">4 对中排对 3 对 → AUC = 3 / 4 = 0.75</text><text x="90" y="1264" class="sm m">分数相同的一对，按排对半次计算。</text>
+</svg></figure></p>
+<h3>方法一：计算面积</h3>
+<p>左侧面积 = 0.5 × 0.5 = 0.25。</p>
+<p>右侧面积 = 0.5 × 1 = 0.50。</p>
+<p><strong>AUC = 0.25 + 0.50 = 0.75。</strong> 竖直线段没有宽度，不增加面积。</p>
+<p>一般情况下，把按 FPR 非递减排列的 ROC 相邻点直线连接，按梯形求和：</p>
+<pre><code class="language-text">AUC = Σ (FPR[i+1] - FPR[i]) × (TPR[i] + TPR[i+1]) / 2
+</code></pre>
+<p>即每段的“宽度 × 平均高度”。同分样本应在同一次阈值变化中一起纳入。</p>
+<h3>方法二：正负样本两两比较</h3>
+<p>2 个坏瓜 × 2 个好瓜，一共有 4 对：A&gt;B、A&gt;D、C&gt;D 排对，C&lt;B 排错。</p>
+<pre><code class="language-text">AUC = (排对的对数 + 0.5 × 同分的对数) / (正类数量 × 负类数量)
+    = 3 / 4
+    = 0.75
+</code></pre>
+<p>它衡量随机抽一个坏瓜和一个好瓜时，坏瓜获得更高分的能力；同分按半次正确计。</p>
+<h2>4. 已确认的理解</h2>
+<ul>
+<li>两个坏瓜都排在两个好瓜前面：4 对全对，AUC = 1。</li>
+<li>AUC = 1 表示当前评估数据上排序完美，不保证未来数据上也完美。</li>
+<li>AUC = 0.95 不表示准确率为 95%，也不表示当前阈值下查全率为 95%。</li>
+<li>AUC 衡量跨阈值的整体排序；实际使用仍需结合漏检、误报代价选择阈值。</li>
+<li>两个模型的 F1 相同，也可能只有一个满足“查全率至少 85%”的要求。</li>
+</ul>
+<h2>5. 下一道练习</h2>
+<ul>
+<li>[ ] 如果两个坏瓜的分数都低于两个好瓜，4 对全部排错，AUC 是多少？</li>
+</ul>
+<h2>6. 评估时的注意事项</h2>
+<ul>
+<li>用训练集学习，验证集选择模型与阈值，测试集评估最终方案。</li>
+<li>填补缺失值等预处理所需统计量，只从训练集学习。</li>
+<li>同一对象的多张图片按对象划分；预测未来时按时间先后评估。</li>
+<li>类别严重不平衡时，结合 P-R 曲线与实际误报数量判断，避免只看 ROC-AUC。</li>
+</ul>
+<p>本笔记使用教学示例与自己的表述，不包含原书 PDF。</p></main></html>
