@@ -1,0 +1,17 @@
+{
+  "version": "preserve-v2",
+  "gpu_benchmark": "passed, matched 20-frame synthetic sequence in three profiles",
+  "http_default_profile": "preserve, effective_steps=1",
+  "websocket_tests": [
+    "preserve repeated frames",
+    "profile switch to soft",
+    "resolution switch 256 to 512 and back"
+  ],
+  "unit_checks": [
+    "bounded modification and clean new stream",
+    "motion or prompt switch discards old residual",
+    "static smoothing and stale history expiry"
+  ],
+  "private_camera_frames_saved": false,
+  "real_person_identity_score_computed": false
+}

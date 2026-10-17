@@ -18,7 +18,7 @@ buf = io.BytesIO()
 image.save(buf, format='JPEG')
 payload = {'image': base64.b64encode(buf.getvalue()).decode(),
            'prompt': 'watercolor portrait painting, soft pastel colors, delicate paper texture',
-           'resolution': 256, 'strength': .5, 'frame_id': 'synthetic-smoke'}
+           'resolution': 256, 'profile': 'legacy', 'strength': .5, 'frame_id': 'synthetic-smoke'}
 outputs = []
 for _ in range(3):
     result = server.infer(payload)

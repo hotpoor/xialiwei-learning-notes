@@ -1,0 +1,55 @@
+{
+  "prompt": "natural photograph of the same person, original face and expression, subtle soft color grading, realistic skin texture",
+  "frames": 20,
+  "resolution": 256,
+  "input": "synthetic portrait; frames 0-11 stationary with tiny sensor-like noise; 12-19 translate 4px per frame",
+  "results": {
+    "preserve": {
+      "config": {
+        "steps": 8,
+        "strength": 0.125,
+        "mix": 0.25,
+        "residual_limit": 48,
+        "history": 0.7
+      },
+      "sequential_fps": 5.29,
+      "frame_ms_median": 188.48,
+      "source_mae_after_jpeg": 0.762,
+      "stationary_residual_jitter_mae": 0.433,
+      "model_steps": 1
+    },
+    "soft": {
+      "config": {
+        "steps": 4,
+        "strength": 0.25,
+        "mix": 0.4,
+        "residual_limit": 64,
+        "history": 0.55
+      },
+      "sequential_fps": 5.56,
+      "frame_ms_median": 175.99,
+      "source_mae_after_jpeg": 1.539,
+      "stationary_residual_jitter_mae": 0.558,
+      "model_steps": 1
+    },
+    "legacy": {
+      "config": {
+        "steps": 2,
+        "strength": 0.5,
+        "mix": 1.0,
+        "residual_limit": 255,
+        "history": 0.0
+      },
+      "sequential_fps": 5.86,
+      "frame_ms_median": 167.83,
+      "source_mae_after_jpeg": 8.909,
+      "stationary_residual_jitter_mae": 2.234,
+      "model_steps": 1
+    }
+  },
+  "limitations": [
+    "Pixel variation and residual jitter are diagnostic, not identity or perceptual quality scores.",
+    "No real face/camera captured.",
+    "Lower edit error is partly guaranteed by residual limiting and blending; does not prove better stylization."
+  ]
+}

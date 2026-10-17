@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 Live AI 实测</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI 记录</title><style>body{margin:0;background:#f2f6f0;color:#213b2f;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:30px 22px 70px}img{max-width:100%;border-radius:12px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #d9e2d8;padding:10px;text-align:left}a{color:#12735b}code{overflow-wrap:anywhere}pre{overflow:auto}h2{margin-top:36px}</style><main><h1>第一版搭建记录：3090 + Windows / WSL2</h1>
 <p>日期：2026-10-18。<a href="../README.md">返回目标路线</a></p>
 <h2>已确认的第一版范围</h2>
 <ul>
@@ -49,7 +49,7 @@
 <tr>
 <td>5</td>
 <td>浏览器摄像头连续输入与256×256展示</td>
-<td>浏览器60秒合成图测试完成301帧、显示平均5.0 FPS；真实摄像头尚未取得视频流</td>
+<td>浏览器合成图已测；用户随后确认真人摄像头跑通，正在试用保留原貌新版</td>
 </tr>
 <tr>
 <td>6</td>
@@ -179,4 +179,6 @@ wsl --list --verbose
 <p>真实摄像头：已尝试启动，内置浏览器未取得视频流，尚未验收；用户需要在本机浏览器/系统确认摄像头权限。合成图不是摄像头测试，不会据此宣称全部功能完成。</p>
 <h3>浏览器显示验收</h3>
 <p>内置浏览器完成60秒合成图测试并自动停止，共301帧、页面最终平均5.0 FPS；运行截图记录299帧时平均5.4 FPS。输出确由3090模型生成，不是预制视频。摄像头启动未取得视频流，需用户本机权限/设备确认，不能宣称真人摄像头验收通过。</p>
+<h3>用户确认摄像头跑通，部署保留原貌档</h3>
+<p>用户确认第一版已跑通，但反馈改动过大。已按要求降低加噪、保留当前原图主体、限幅混合风格残差并对静止区域平滑。新版默认保留原貌档已在同一服务部署，HTTP/WebSocket与档位/分辨率切换通过。部署重启后用户继续在新版试用，此后没有再次打断摄像头或保存私人画面。<a href="../tuning/2026-10-18-preserve/README.md">调参、SVG、合成样本与实测数据</a>。先前“摄像头待确认”的段落是当时的执行状态，当前以本条用户反馈为准。</p>
 </main></html>

@@ -12,13 +12,14 @@ from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconn
 from fastapi.responses import FileResponse
 from PIL import Image, ImageOps, UnidentifiedImageError
 import torch
+from style_preserve import PROFILES, TemporalStyle
 from diffusers import AutoPipelineForImage2Image
 
 ROOT = Path(__file__).resolve().parent
 MODEL_ID = 'stabilityai/sd-turbo'
 MODEL_REVISION = os.environ.get('LIVEAI_MODEL_REVISION', 'b261bac6fd2cf515557d5d0707481eafa0485ec2')
 lock = asyncio.Lock()
-state = {'status': 'loading', 'model': MODEL_ID, 'resolution': 256, 'error': None}
+state = {'status': 'loading', 'model': MODEL_ID, 'resolution': 256, 'error': None, 'default_profile': 'preserve', 'version': 'preserve-v2'}
 pipe = None
 embedding_cache = {}
 Image.MAX_IMAGE_PIXELS = 16_000_000
@@ -76,7 +77,7 @@ async def local_only_http(request: Request, call_next):
     return await call_next(request)
 
 
-def infer(payload):
+def infer(payload, temporal=None):
     if not isinstance(payload, dict):
         raise ValueError('Expected JSON object')
     if state['status'] != 'ready':
@@ -87,9 +88,10 @@ def infer(payload):
     prompt = str(payload.get('prompt', '')).strip()
     if not prompt or len(prompt) > 1200:
         raise ValueError('Prompt must contain 1–1200 characters')
-    strength = float(payload.get('strength', .5))
-    if not .5 <= strength <= 1:
-        raise ValueError('Strength must be between 0.5 and 1')
+    profile = str(payload.get('profile', 'preserve'))
+    if profile not in PROFILES:
+        raise ValueError('Unknown style profile')
+    cfg = PROFILES[profile]
     encoded = payload.get('image', '')
     if not isinstance(encoded, str) or len(encoded) > 2_000_000:
         raise ValueError('Frame too large')
@@ -109,16 +111,20 @@ def infer(payload):
         generator = torch.Generator(device='cuda').manual_seed(42)
         output = pipe(
             prompt_embeds=embedding_cache[prompt], image=image,
-            num_inference_steps=2, strength=strength, guidance_scale=0.0,
+            num_inference_steps=cfg['steps'], strength=cfg['strength'], guidance_scale=0.0,
             generator=generator,
         ).images[0]
         torch.cuda.synchronize()
+    model_ms = (time.perf_counter() - started) * 1000
+    temporal = temporal if temporal is not None else TemporalStyle()
+    output = temporal.apply(image, output, profile, key=(profile, resolution, prompt))
     infer_ms = (time.perf_counter() - started) * 1000
     buf = io.BytesIO()
     output.save(buf, format='JPEG', quality=88)
     return dict(image=base64.b64encode(buf.getvalue()).decode(),
                 infer_ms=round(infer_ms, 1), resolution=resolution,
-                frame_id=payload.get('frame_id'))
+                frame_id=payload.get('frame_id'), profile=profile, model_ms=round(model_ms, 1),
+                effective_steps=int(cfg['steps']*cfg['strength']))
 
 
 @app.post('/api/frame')
@@ -145,6 +151,7 @@ async def socket(ws: WebSocket):
         await ws.close(code=1008)
         return
     await ws.accept()
+    temporal = TemporalStyle()  # Private to this connection, cleared on disconnect.
     try:
         while True:
             raw = await ws.receive_text()
@@ -154,7 +161,7 @@ async def socket(ws: WebSocket):
             try:
                 payload = json.loads(raw)
                 async with lock:
-                    result = await asyncio.to_thread(infer, payload)
+                    result = await asyncio.to_thread(infer, payload, temporal)
                 await ws.send_json(result)
             except (ValueError, TypeError, KeyError, UnidentifiedImageError) as exc:
                 await ws.send_json({'error': str(exc)})

@@ -1,6 +1,6 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3090 Live AI 记录</title><style>body{background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui;margin:0}main{max-width:1100px;margin:auto;padding:30px 22px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #dce3ed;padding:10px;text-align:left}pre{overflow:auto;background:#e5edf5;padding:18px}img{max-width:100%}a{color:#087d69}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
-<p>记录日期：2026-10-18。状态：3090本地图像流、WebSocket与Mac SSH链路已跑通并测得帧率与板卡功耗；真实摄像头权限与画面尚待确认。本文不是 Decart 内部架构的复现说明。</p>
-<p><a href="benchmarks/2026-10-18/README.md">实测报告：帧率与成本</a> · <a href="benchmarks/2026-10-18/index.html">报告HTML/SVG</a> · <a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI 记录</title><style>body{margin:0;background:#f2f6f0;color:#213b2f;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:30px 22px 70px}img{max-width:100%;border-radius:12px}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #d9e2d8;padding:10px;text-align:left}a{color:#12735b}code{overflow-wrap:anywhere}pre{overflow:auto}h2{margin-top:36px}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
+<p>记录日期：2026-10-18。状态：用户已确认摄像头跑通。已部署保留原貌默认档，降低重绘幅度并减少静止风格闪烁；真人效果待用户回访。本文不是 Decart 内部架构的复现说明。</p>
+<p><a href="tuning/2026-10-18-preserve/README.md">最新调整：保留原貌与减闪烁</a> · <a href="tuning/2026-10-18-preserve/index.html">调参HTML/SVG</a> · <a href="benchmarks/2026-10-18/README.md">实测报告：帧率与成本</a> · <a href="benchmarks/2026-10-18/index.html">报告HTML/SVG</a> · <a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
 <h2>1. 已确认的目标与设备</h2>
 <ul>
 <li>目标：Lucy 类——摄像头实时输入，结合提示词改变人物、场景或风格；暂不以 Oasis 类可交互世界为主线。</li>
@@ -114,7 +114,7 @@ Mac浏览器显示与交互
 <p>先发现具体失败点，再决定训练目标。风格/角色的图像LoRA可作为较小的第一步，但它不自动解决时序闪烁、长期一致性或推理速度。视频微调、蒸馏与因果缓存需分别研究，不能承诺所有方法均在24GB显存下可训练。</p>
 <p>学习主线改为：张量和神经网络直觉 → 图像扩散与条件控制 → 视频时序一致性 → 流式推理/缓存/队列 → 数据与小范围训练 → 任务评估。西瓜书保留作泛化、数据边界、优化与评价的基础参考，不要求先学完整本书或熟练手算指标。</p>
 <h2>8. 下一步</h2>
-<p>已完成环境安装、CUDA计算、固定版本模型下载、单帧及连续图像流测试。256服务端7.06 FPS、Mac经SSH客户端5.54 FPS，板卡平均约248W。下一步在用户本机确认摄像头权限，再检查真人效果、闪烁、动作与后续加速。</p>
+<p>已完成环境安装、CUDA计算、固定版本模型下载、单帧及连续图像流测试。256服务端7.06 FPS、Mac经SSH客户端5.54 FPS，板卡平均约248W。用户已确认摄像头跑通；本轮按反馈部署保留原貌档，接下来收集真人效果、闪烁、动作与后续加速反馈。</p>
 <h2>第一版已启动</h2>
 <p><a href="setup/README.md">第1步：检查Windows/WSL2主机</a> · <a href="setup/index.html">HTML图解</a></p>
 <p>推理服务已在WSL独立运行。实测数据、成本口径与待验收摄像头部分见上方报告和搭建记录。</p>

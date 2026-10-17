@@ -17,7 +17,7 @@ def frame(i, prompt):
     draw.ellipse((76+dx,26,180+dx,130),fill='#e7b78c')
     draw.rectangle((45+dx,135,211+dx,256),fill='#304e7b')
     buf = io.BytesIO();image.save(buf,format='JPEG')
-    return json.dumps({'image':base64.b64encode(buf.getvalue()).decode(),'prompt':prompt,'resolution':256,'strength':.5,'frame_id':i})
+    return json.dumps({'image':base64.b64encode(buf.getvalue()).decode(),'prompt':prompt,'resolution':256,'profile':'legacy','strength':.5,'frame_id':i})
 
 async def main():
     with urllib.request.urlopen(BASE+'/health',timeout=10) as response: health=json.load(response)

@@ -34,7 +34,7 @@ def payload(i, resolution):
     draw.ellipse(box((101, 65, 108, 73)), fill='#26313b')
     draw.ellipse(box((148, 65, 155, 73)), fill='#26313b')
     buf = io.BytesIO(); image.save(buf, format='JPEG')
-    return {'image': base64.b64encode(buf.getvalue()).decode(), 'prompt': 'watercolor portrait painting, soft pastel colors, delicate paper texture', 'resolution': resolution, 'strength': .5, 'frame_id': i}
+    return {'image': base64.b64encode(buf.getvalue()).decode(), 'prompt': 'watercolor portrait painting, soft pastel colors, delicate paper texture', 'resolution': resolution, 'profile': 'legacy', 'strength': .5, 'frame_id': i}
 
 server.load_model()
 thread = threading.Thread(target=sample_power, daemon=True); thread.start()
@@ -60,6 +60,6 @@ try:
         print(json.dumps(result), flush=True)
 finally:
     stop.set(); thread.join(timeout=3)
-report = {'model':server.MODEL_ID, 'revision':server.MODEL_REVISION, 'gpu':server.state['gpu'], 'torch':torch.__version__, 'strength':.5, 'total_steps':2, 'effective_steps':1, 'warmup_frames':3, 'input':'moving synthetic shapes', 'idle_gpu_board_watts_mean': round(statistics.mean(s['watts'] for s in idle),2) if idle else None, 'results':results, 'limitations':['No webcam capture, network, browser rendering or display latency in FPS.', 'GPU board power only; not whole-machine wall power. Includes other GPU activity if present.', 'Sequential single-user baseline; no temporal model or concurrency claims.']}
+report = {'model':server.MODEL_ID, 'revision':server.MODEL_REVISION, 'gpu':server.state['gpu'], 'torch':torch.__version__, 'profile':'legacy','strength':.5, 'total_steps':2, 'effective_steps':1, 'warmup_frames':3, 'input':'moving synthetic shapes', 'idle_gpu_board_watts_mean': round(statistics.mean(s['watts'] for s in idle),2) if idle else None, 'results':results, 'limitations':['No webcam capture, network, browser rendering or display latency in FPS.', 'GPU board power only; not whole-machine wall power. Includes other GPU activity if present.', 'Sequential single-user baseline; no temporal model or concurrency claims.']}
 (artifacts/'benchmark.json').write_text(json.dumps(report,indent=2))
 print(json.dumps(report,indent=2), flush=True)
