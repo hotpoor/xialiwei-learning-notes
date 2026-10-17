@@ -1,0 +1,45 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>回归误差 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>回归任务：均方误差 MSE 与 RMSE</h1>
+<ul>
+<li>学习日期：2026-10-18</li>
+<li>状态：已讲解，练习待回答</li>
+<li><a href="regression-mse.html">HTML 图解版</a> · <a href="02-模型评估与选择.md">返回第二章</a></li>
+</ul>
+<h2>1. 从分类转到回归</h2>
+<p>预测好瓜坏瓜是分类；预测西瓜重量是回归。本节讨论数值预测与实际数值相差多远。</p>
+<p><figure aria-label="西瓜重量预测误差与 MSE 计算"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="830" viewBox="0 0 1080 830"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="830" fill="#f3f6fb"/><text x="45" y="60" class="h">预测西瓜重量：误差怎样打分？</text><text x="45" y="105" class="t">预测误差 e = 预测值 − 实际值｜正数：高估；负数：低估</text><rect x="40" y="135" width="1000" height="300" rx="16" fill="white"/><text x="80" y="185" class="t">西瓜</text><text x="270" y="185" class="t">实际 kg</text><text x="470" y="185" class="t">预测 kg</text><text x="680" y="185" class="t">误差 kg</text><text x="870" y="185" class="t">误差平方 kg²</text><text x="80" y="255" class="t">A</text><text x="270" y="255" class="t">3</text><text x="470" y="255" class="t">4</text><text x="680" y="255" class="t">+1</text><text x="870" y="255" class="t">1</text><text x="80" y="320" class="t">B</text><text x="270" y="320" class="t">5</text><text x="470" y="320" class="t">4</text><text x="680" y="320" class="t">−1</text><text x="870" y="320" class="t">1</text><text x="80" y="385" class="t">C</text><text x="270" y="385" class="t">4</text><text x="470" y="385" class="t">6</text><text x="680" y="385" class="t">+2</text><text x="870" y="385" class="t">4</text><path d="M65 210H1015" stroke="#dce3ed"/><rect x="40" y="455" width="1000" height="150" rx="16" fill="#fff0df"/><text x="65" y="500" class="h">直接平均：(+1 − 1 + 2) ÷ 3 ≈ 0.67 kg</text><text x="65" y="545" class="t">高估和低估会相互抵消，不能代表整体误差大小。</text><text x="65" y="580" class="sm">例如误差 +10 kg 和 −10 kg，平均为 0，但预测显然不准确。</text><rect x="40" y="625" width="1000" height="160" rx="16" fill="#e0f2eb"/><text x="65" y="670" class="h">MSE：先平方，再求平均，避免正负抵消</text><text x="65" y="718" class="t">均方误差 = (1² + (−1)² + 2²) ÷ 3 = 2 kg²</text><text x="65" y="760" class="t">RMSE：再开平方，回到原单位 → √2 ≈ 1.41 kg</text></svg></figure></p>
+<p>规定误差 e = 预测值 - 实际值。高估为正，低估为负。直接平均误差会抵消，更适合观察整体高估或低估的倾向，不能独自反映预测误差大小。</p>
+<h2>2. MSE：均方误差</h2>
+<pre><code class="language-text">MSE = [(预测值1 - 实际值1)² + … + (预测值n - 实际值n)²] / n
+</code></pre>
+<p>先平方使误差非负，再取平均。比较同一批数据、同一目标单位下的预测结果时，MSE 越小越好；为 0 表示每个预测都等于实际值。计算需要 n &gt; 0。</p>
+<p>图中三个误差为 +1、-1、+2 kg，因此 MSE = (1 + 1 + 4) / 3 = 2 kg²。</p>
+<p>平方使大误差的影响更明显：误差从 1 增至 3，平方项从 1 增至 9。</p>
+<h2>3. RMSE：均方根误差</h2>
+<pre><code class="language-text">RMSE = √MSE
+</code></pre>
+<p>例中 RMSE = √2 ≈ 1.41 kg，与预测目标使用相同单位，更容易解释。在同一批数据上，RMSE 和 MSE 对模型的优劣排序相同。</p>
+<p>MSE 单位是 kg²，RMSE 单位是 kg；RMSE 不是“绝对误差的平均值”，也不表示每个瓜都相差 1.41 kg。</p>
+<h2>4. 练习（待回答）</h2>
+<p>同一批两个瓜的实际重量都是 5 kg：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>第一个瓜的预测</th>
+<th>第二个瓜的预测</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>4 kg</td>
+<td>6 kg</td>
+</tr>
+<tr>
+<td>B</td>
+<td>5 kg</td>
+<td>7 kg</td>
+</tr>
+</tbody>
+</table>
+<p>分别算 A 和 B 的 MSE。只按 MSE 评价，选哪个？</p></main></html>
