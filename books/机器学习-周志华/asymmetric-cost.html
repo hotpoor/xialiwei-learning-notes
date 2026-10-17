@@ -1,0 +1,48 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>非对称错误代价 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>补充应用：高估与低估代价不同</h1>
+<ul>
+<li>学习日期：2026-10-18</li>
+<li>状态：已讲解，练习待回答</li>
+<li>这是性能度量的应用补充，不代表原书新增章节。</li>
+<li><a href="mae-vs-mse.md">上一节：MAE 与 MSE</a> · <a href="asymmetric-cost.html">HTML 图解版</a></li>
+</ul>
+<h2>1. 为什么需要新的评价规则</h2>
+<p>上一题中，高估和低估每差 1 kg 的成本相同，平均成本等于 2 元/kg × MAE。</p>
+<p>现在更改教学假设：每低估 1 kg 损失 10 元，每高估 1 kg 损失 2 元。误差仍定义为预测减实际。</p>
+<p><figure aria-label="高估低估代价不同的图解"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="760" viewBox="0 0 1080 760"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="760" fill="#f3f6fb"/><text x="45" y="60" class="h">如果高估与低估，代价不一样呢？</text><text x="45" y="105" class="t">教学假设：每低估 1 kg 损失 10 元；每高估 1 kg 损失 2 元</text><rect x="40" y="135" width="1000" height="310" rx="16" fill="white"/><text x="70" y="185" class="t">预测情况</text><text x="400" y="185" class="t">绝对误差</text><text x="750" y="185" class="t">实际损失</text><path d="M65 210H1015 M65 305H1015" stroke="#dce3ed"/><text x="70" y="270" class="t">低估 2 kg（误差 −2）</text><text x="400" y="270" class="t">2 kg</text><text x="750" y="270" class="t">2 × 10 = 20 元</text><text x="70" y="365" class="t">高估 2 kg（误差 +2）</text><text x="400" y="365" class="t">2 kg</text><text x="750" y="365" class="t">2 × 2 = 4 元</text><text x="70" y="415" class="sm">MAE、MSE 对相同大小的正负误差一视同仁；本例的真实成本不是这样。</text><rect x="40" y="470" width="1000" height="240" rx="16" fill="#e0f2eb"/><text x="65" y="515" class="h">把实际代价写进评价规则</text><text x="65" y="560" class="t">低估损失 = 10 × 低估的 kg 数</text><text x="65" y="605" class="t">高估损失 = 2 × 高估的 kg 数</text><text x="65" y="660" class="t">每个样本先算损失，再求平均 → 平均成本（元）</text></svg></figure></p>
+<p>MAE 对 +2 kg 和 -2 kg 都记 2 kg；MSE 都记 4 kg²。但本题实际损失分别是 4 元与 20 元。这两种指标不能直接表达本题的方向差异。</p>
+<h2>2. 定义成本</h2>
+<pre><code class="language-text">e = 预测重量 - 实际重量
+单次损失（元） = 10 × max(-e, 0) + 2 × max(e, 0)
+平均成本 = 所有样本的单次损失之和 / 样本数
+</code></pre>
+<p>式中的 10 与 2 的单位是元/kg；e 的单位是 kg。e=0 时损失为 0。这里假设损失随误差大小分段线性增长；实际任务应根据真实代价定义。</p>
+<p>评价标准应事先明确，用验证集选择模型与方案，保留测试集评估最终结果。也可把这样的损失用于训练；本节先只讨论评价。</p>
+<h2>3. 练习（待回答）</h2>
+<p>两个包裹实际都为 5 kg：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>第一个预测</th>
+<th>第二个预测</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E</td>
+<td>4 kg</td>
+<td>5 kg</td>
+</tr>
+<tr>
+<td>F</td>
+<td>6 kg</td>
+<td>6 kg</td>
+</tr>
+</tbody>
+</table>
+<p>仍按低估每 kg 损失 10 元、高估每 kg 损失 2 元：</p>
+<ol>
+<li>E、F 的 MAE 分别是多少？</li>
+<li>E、F 的平均成本分别是多少？</li>
+<li>按 MAE 与按平均成本，选择是否相同？</li>
+</ol></main></html>
