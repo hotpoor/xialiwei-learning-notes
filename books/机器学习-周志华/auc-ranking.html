@@ -1,0 +1,67 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AUC 的边界与方向 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>AUC 的边界：1、0.5、0 与分数方向</h1>
+<ul>
+<li>学习日期：2026-10-17</li>
+<li>状态：本节已讲解，练习待回答</li>
+<li><a href="roc-auc.md">上一节：AUC 怎么算</a> · <a href="auc-ranking.html">HTML 图解版</a> · <a href="02-模型评估与选择.md">返回第二章</a></li>
+</ul>
+<h2>1. 先固定分数的含义</h2>
+<p>仍把坏瓜作为正类，约定分数越高，越认为是坏瓜。下面都是两个坏瓜、两个好瓜，因此正负配对总数为 2 × 2 = 4。</p>
+<p><figure aria-label="AUC 等于 1、0.5、0 的排序例子"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1030" viewBox="0 0 1080 1030"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:26px;font-weight:700}.t{font-size:21px}.s{font-size:18px}</style><rect width="1080" height="1030" fill="#f3f6fb"/><text x="40" y="55" class="h">AUC 的三种排序：1、0.5、0</text><text x="40" y="95" class="t">坏瓜是正类｜越靠左分数越高｜每个坏瓜分别与两个好瓜比较，共 4 对</text><rect x="35" y="125" width="1010" height="215" rx="16" fill="white"/><text x="60" y="162" class="h">AUC = 1：全部排对</text><rect x="65" y="185" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="127" y="227" text-anchor="middle" class="h">坏</text><rect x="215" y="185" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="277" y="227" text-anchor="middle" class="h">坏</text><rect x="365" y="185" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="427" y="227" text-anchor="middle" class="h">好</text><rect x="515" y="185" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="577" y="227" text-anchor="middle" class="h">好</text><text x="710" y="226" class="t">4 对排对 / 4 对 = 1</text><text x="65" y="285" class="s">分数：0.9　　　　　0.8　　　　　0.7　　　　　0.1</text><text x="65" y="320" class="s">说明：当前数据上，所有坏瓜的分数都高于好瓜。</text><rect x="35" y="360" width="1010" height="215" rx="16" fill="white"/><text x="60" y="397" class="h">AUC = 0.5：排对一半</text><rect x="65" y="420" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="127" y="462" text-anchor="middle" class="h">坏</text><rect x="215" y="420" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="277" y="462" text-anchor="middle" class="h">好</text><rect x="365" y="420" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="427" y="462" text-anchor="middle" class="h">好</text><rect x="515" y="420" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="577" y="462" text-anchor="middle" class="h">坏</text><text x="710" y="461" class="t">2 对排对 / 4 对 = 0.5</text><text x="65" y="520" class="s">分数：0.9　　　　　0.8　　　　　0.7　　　　　0.1</text><text x="65" y="555" class="s">说明：此例配对胜率为一半；不代表每个阈值都没有用。</text><rect x="35" y="595" width="1010" height="215" rx="16" fill="white"/><text x="60" y="632" class="h">AUC = 0：全部排反</text><rect x="65" y="655" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="127" y="697" text-anchor="middle" class="h">好</text><rect x="215" y="655" width="125" height="65" rx="12" fill="#e6ecf5"/><text x="277" y="697" text-anchor="middle" class="h">好</text><rect x="365" y="655" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="427" y="697" text-anchor="middle" class="h">坏</text><rect x="515" y="655" width="125" height="65" rx="12" fill="#d9f2e7"/><text x="577" y="697" text-anchor="middle" class="h">坏</text><text x="710" y="696" class="t">0 对排对 / 4 对 = 0</text><text x="65" y="755" class="s">分数：0.9　　　　　0.8　　　　　0.7　　　　　0.1</text><text x="65" y="790" class="s">说明：当前数据上，所有坏瓜的分数都低于好瓜。</text><rect x="35" y="845" width="1010" height="150" rx="16" fill="#e3f2ee"/><text x="60" y="885" class="h">分数方向反了怎么办？</text><text x="60" y="928" class="t">把分数改为负数（s → −s），原来低分的瓜就排到前面。</text><text x="60" y="966" class="t">同一批数据、同分按半次计时：新 AUC = 1 − 原 AUC。</text></svg></figure></p>
+<h2>2. 三种排序</h2>
+<p>表中的顺序均按模型分数从高到低排列，分数依次为 0.9、0.8、0.7、0.1。</p>
+<table>
+<thead>
+<tr>
+<th>从高分到低分</th>
+<th>排对的正负配对</th>
+<th>总配对</th>
+<th>AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>坏、坏、好、好</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>坏、好、好、坏</td>
+<td>2</td>
+<td>4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>好、好、坏、坏</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>第一行已由学习者正确回答：4 对全对，AUC = 1。</p>
+<p>第二行中，排第一的坏瓜战胜两个好瓜，排最后的坏瓜输给两个好瓜，所以 AUC = 2 / 4 = 0.5。</p>
+<p>第三行中，两个坏瓜都输给两个好瓜，所以 AUC = 0。</p>
+<h2>3. AUC = 0.5 要怎样理解</h2>
+<p>独立随机打分的 AUC 期望为 0.5，但一次有限样本评估不一定恰好得到 0.5。</p>
+<p>反过来，一次得到 AUC = 0.5，也不能仅凭这个数断定模型分数完全随机，或者每个阈值下都没有用。图中的第二行是一个明确的排序例子：配对胜率一半，但最高分的那个瓜仍是坏瓜。</p>
+<h2>4. AUC 很低，先检查分数方向</h2>
+<p>如果误把“好瓜分数”当作“坏瓜分数”，就可能看到很低的 AUC。评估前要确认正类和分数的含义。</p>
+<p>同一批同时包含正负类的数据上，把分数 s 改为 -s，会反转全部不相等的排序，并保留同分。按同分计半次的规则：</p>
+<pre><code class="language-text">AUC(-s) = 1 - AUC(s)
+</code></pre>
+<p>因此 0.1 反向后是 0.9；0 反向后是 1；0.5 反向后仍是 0.5。只有分数确实处于 0～1 时，才也可以用 1-s 反向；一般分数用 -s 即可。</p>
+<p>不要根据最终测试集的成绩反复挑选方向。分数含义应预先确定，需要比较的方案应在验证集上选择；测试集保留给最终评估。</p>
+<h2>5. 边界与实际使用</h2>
+<ul>
+<li>AUC = 1：只表示当前评估数据的排序完美，不保证新数据也完美。</li>
+<li>AUC 衡量排序，不衡量预测概率是否准确，也不直接指定使用阈值。</li>
+<li>仅有一个类别的数据，无法按正负配对定义计算 ROC-AUC。</li>
+</ul>
+<h2>6. 练习（待回答）</h2>
+<p>一个模型输出的是“好瓜分数”，越高越认为是好瓜；但我们评估时把坏瓜设为正类，直接输入该分数，得到 AUC = 0.1。</p>
+<ol>
+<li>这能否直接说明模型完全没用？</li>
+<li>把分数改为 -s，且使用同一批数据，新的 AUC 是多少？</li>
+</ol>
+<p>本笔记为教学示例，不包含原书 PDF。</p></main></html>
