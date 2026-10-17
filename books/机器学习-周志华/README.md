@@ -48,3 +48,5 @@
 后续教学继续提供 SVG、Markdown、HTML，并同步到本仓库。练习回答后再更新掌握状态。
 
 - [AUC、阈值与概率](auc-threshold.md) · [HTML 图解](auc-threshold.html)（2026-10-18）
+
+- [类别不平衡与 P-R 曲线](class-imbalance.md) · [HTML](class-imbalance.html)（2026-10-18）

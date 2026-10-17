@@ -1,0 +1,61 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>类别不平衡 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>类别不平衡：为什么还要看查准率与 P-R 曲线</h1>
+<ul>
+<li>学习日期：2026-10-18</li>
+<li>状态：已讲解，练习待回答</li>
+<li><a href="auc-threshold.md">上一节：AUC 与阈值</a> · <a href="class-imbalance.html">HTML 图解版</a></li>
+</ul>
+<h2>1. 同样的 TPR 与 FPR，不同的查准率</h2>
+<p>坏瓜是正类。为单独观察类别比例的影响，假设模型在两批数据上都达到查全率 90%、假正例率 10%。实际换场景后这两个比率不一定保持不变。</p>
+<p><figure aria-label="两种类别比例下的误报数量与查准率"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="860" viewBox="0 0 1080 860"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:26px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="860" fill="#f3f6fb"/><text x="45" y="58" class="h">同样的查全率与误报比例，查准率为什么不同？</text><text x="45" y="101" class="t">假设两批数据上：查全率均为 90%，假正例率均为 10%</text><rect x="40" y="135" width="480" height="465" rx="16" fill="white"/><text x="65" y="180" class="h">场景 A：坏瓜占一半</text><text x="65" y="235" class="t">实际坏瓜：100 个</text><text x="65" y="280" class="t">实际好瓜：100 个</text><path d="M65 305H495" stroke="#dce3ed"/><text x="65" y="350" class="t">找到坏瓜：100 × 90% = 90</text><text x="65" y="400" class="t">误报好瓜：100 × 10% = 10</text><text x="65" y="460" class="t">报出的疑似坏瓜：100 个</text><text x="65" y="515" class="t">查准率 = 90 / (90 + 10)</text><text x="65" y="565" class="h" fill="#087d69">= 90%</text><rect x="560" y="135" width="480" height="465" rx="16" fill="white"/><text x="585" y="180" class="h">场景 B：坏瓜只有 1%</text><text x="585" y="235" class="t">实际坏瓜：10 个</text><text x="585" y="280" class="t">实际好瓜：990 个</text><path d="M585 305H1015" stroke="#dce3ed"/><text x="585" y="350" class="t">找到坏瓜：10 × 90% = 9</text><text x="585" y="400" class="t">误报好瓜：990 × 10% = 99</text><text x="585" y="460" class="t">报出的疑似坏瓜：108 个</text><text x="585" y="515" class="t">查准率 = 9 / (9 + 99)</text><text x="585" y="565" class="h" fill="#087d69">= 约 8.3%</text><rect x="40" y="625" width="1000" height="185" rx="16" fill="#e0f2eb"/><text x="65" y="670" class="h">关键：10% 的误报比例，乘上大量好瓜，也会产生很多误报。</text><text x="65" y="720" class="t">ROC 点相同：(FPR, TPR) = (0.1, 0.9)</text><text x="65" y="766" class="t">P-R 点不同：(Recall, Precision) = (0.9, 0.9) 与 (0.9, 约 0.083)</text></svg></figure></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>实际坏瓜</th>
+<th>实际好瓜</th>
+<th>找出的坏瓜 TP</th>
+<th>误报的好瓜 FP</th>
+<th>查准率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>100</td>
+<td>100</td>
+<td>90</td>
+<td>10</td>
+<td>90 / 100 = 90%</td>
+</tr>
+<tr>
+<td>B</td>
+<td>10</td>
+<td>990</td>
+<td>9</td>
+<td>99</td>
+<td>9 / 108 ≈ 8.3%</td>
+</tr>
+</tbody>
+</table>
+<p>场景 B 报出的 108 个疑似坏瓜中，只有 9 个是真的坏瓜。即使 FPR 只有 10%，乘上大量好瓜后也会产生 99 个误报。</p>
+<h2>2. ROC 与 P-R 的不同视角</h2>
+<ul>
+<li>ROC 横轴 FPR、纵轴 TPR：分别以实际负类、实际正类为分母。</li>
+<li>P-R 横轴 Recall、纵轴 Precision：直接观察找全程度与报出结果的可信程度。</li>
+<li>上例 ROC 点相同，但 P-R 点不同。一个 ROC 点不能决定整条 ROC 曲线或 AUC。</li>
+<li>正类稀少时，结合 P-R 曲线、误报数量与业务成本，更容易发现实际使用的问题；ROC-AUC 仍有价值。</li>
+<li>不同正类比例的数据集上，查准率和 P-R 表现不宜脱离背景直接比较。评估数据应尽量反映部署场景。</li>
+</ul>
+<h2>3. 可选公式</h2>
+<p>令 p 为正类比例，t 为 TPR，f 为 FPR，则在分母非零时：</p>
+<pre><code class="language-text">Precision = (t × p) / (t × p + f × (1 - p))
+</code></pre>
+<p>不必背公式：分子是找到的正类比例，分母是所有报出样本的比例。</p>
+<h2>4. 练习（待回答）</h2>
+<p>有 10 个坏瓜、990 个好瓜。假设改进后的模型仍能找出 9 个坏瓜，但只误报 9 个好瓜。</p>
+<ol>
+<li>查全率是多少？</li>
+<li>查准率是多少？</li>
+<li>假正例率是多少？</li>
+</ol>
+<p>注意：查准率的分母是所有报出的瓜，假正例率的分母是实际好瓜。</p></main></html>
