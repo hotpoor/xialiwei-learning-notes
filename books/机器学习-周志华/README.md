@@ -74,3 +74,7 @@
 以理解与正确运用为主：能说清指标用途、适用条件，能选择评价方案，能检查 AI/代码的输入输出。手算少做且可选，计算题附公式或代入提示，不要求背公式或追求速度。不能把历史 GPT 辅助答案当作独立计算能力的证据，但手算熟练度也不作为理解与应用能力的唯一标准。
 
 [理解与运用起步引导](review/starter.md) · [离线复习页](review/index.html#starter)
+
+## 与LLM连接
+
+[西瓜书、Transformer与LLM的区别](ml-to-transformer.md) · [HTML图解](ml-to-transformer.html)

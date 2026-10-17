@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西瓜书与LLM · 学习桥梁</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>西瓜书与 Transformer、LLM：差在哪里</h1>
+<ul>
+<li>记录日期：2026-10-18</li>
+<li>状态：概念桥接，未将新术语计为已掌握，也不追加题库数量</li>
+<li><a href="ml-to-transformer.html">HTML 图解版</a></li>
+</ul>
+<h2>1. 直接回答</h2>
+<p>架构、规模和工程实践差别很大，但机器学习的基本问题相通。西瓜书提供通用基础，并不是现代 LLM 的完整教材。</p>
+<p><figure aria-label="西瓜书与LLM的基础连接"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="710" viewBox="0 0 1080 710"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="710" fill="#f3f6fb"/><text x="40" y="55" class="h">西瓜书 → Transformer → LLM：基础相通，新增内容很多</text><rect x="40" y="90" width="1000" height="145" rx="16" fill="#e0f2eb"/><text x="65" y="135" class="h">共同基础：从数据中学习，通过目标任务检验泛化</text><text x="65" y="180" class="t">训练与评估边界 · 损失函数 · 优化 · 泛化 · 错误代价</text><text x="65" y="215" class="sm">这些问题到了大语言模型仍然存在，具体方法和指标需要匹配任务。</text><rect x="40" y="260" width="475" height="255" rx="16" fill="white"/><text x="65" y="305" class="h">书中典型入门例子</text><text x="65" y="355" class="t">色泽、根蒂、敲声 → 判断好坏</text><text x="65" y="400" class="t">借小数据和多种算法理解学习</text><text x="65" y="450" class="sm">分类例子可看准确率、P/R、AUC</text><text x="65" y="485" class="sm">回归例子可看MAE、MSE等</text><rect x="565" y="260" width="475" height="255" rx="16" fill="white"/><text x="590" y="305" class="h">常见自回归 LLM 路线</text><text x="590" y="355" class="t">文本 → token → 向量表示</text><text x="590" y="400" class="t">Transformer → 预测下一个token</text><text x="590" y="450" class="sm">新补：注意力、预训练与后训练</text><text x="590" y="485" class="sm">还要按生成、检索等实际任务评估</text><rect x="40" y="540" width="1000" height="125" rx="16" fill="white"/><text x="65" y="585" class="h">理解与应用路线：学习基础 + 神经网络 + LLM 专题 + 实际评估</text><text x="65" y="630" class="sm">Transformer是一种神经网络架构，LLM是一类大规模语言模型，两者不是同义词。</text></svg></figure></p>
+<p>Transformer（通常这样拼写）是一种神经网络架构；LLM 是大规模语言模型这一类模型，不能将二者视为同义词。Transformer 原论文发表于2017年，早于它的西瓜书第一版不包含这套后来的架构。原论文介绍的是用于序列转换任务的、基于注意力的编码器—解码器架构；常见自回归生成式 LLM 使用其后发展的路线，不能把原论文架构与所有LLM直接画等号。<a href="https://arxiv.org/abs/1706.03762">Transformer原论文</a></p>
+<h2>2. 哪些知识继续有用</h2>
+<table>
+<thead>
+<tr>
+<th>已学基础</th>
+<th>到LLM中要继续问的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>泛化与过拟合</td>
+<td>是在新问题上有效，还是记住了训练内容？</td>
+</tr>
+<tr>
+<td>数据划分与泄漏</td>
+<td>评测题是否进入训练或方案选择过程？</td>
+</tr>
+<tr>
+<td>损失与实际成本</td>
+<td>训练目标降低，实际任务是否也做得更好？</td>
+</tr>
+<tr>
+<td>指标的适用条件</td>
+<td>做分类、检索或生成，应分别采用什么评估？</td>
+</tr>
+</tbody>
+</table>
+<p>并非所有指标都直接照搬：自由文本生成不能普遍用MAE衡量，ROC-AUC也需要有明确正负类与预测分数的任务。若LLM用于分类，这些分类指标仍可使用。</p>
+<h2>3. 要补的桥梁</h2>
+<p>以常见自回归文本生成模型为例，需要逐步理解：token、向量表示、神经网络训练、注意力、Transformer、预测下一个token的预训练，以及后训练与具体应用评估。</p>
+<p>文本本身可构造“前文→下一个token”的训练目标，不必每一条都有人手工标注，这称为自监督学习。它依然有训练目标和损失，并非没有监督信号。这里是补充概念，不要求立即掌握计算。<a href="https://arxiv.org/abs/2005.14165">自回归大语言模型研究实例</a></p>
+<h2>4. 针对当前学习目标的建议</h2>
+<p>目标是借助AI/代码正确理解和运用模型：保留数据、泛化与评估的基础，结合第五章神经网络建立直觉，同时另补LLM专题。不必把全书所有算法推导都学完才允许接触Transformer，也不必把ROC/AUC手算熟练作为进入LLM的门槛。</p>
+<p>后续可用“西瓜例子讲基础，同步给一个LLM应用例子”的方式连接，仍以图解与少量选择题为主。</p></main></html>
