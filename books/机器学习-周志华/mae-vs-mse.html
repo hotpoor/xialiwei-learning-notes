@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAE 与 MSE · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>MAE 与 MSE：评价指标体现了什么偏好</h1>
+<ul>
+<li>学习日期：2026-10-18</li>
+<li>状态：已讲解，练习待回答</li>
+<li><a href="regression-mse.md">上一节：MSE 与 RMSE</a> · <a href="mae-vs-mse.html">HTML 图解版</a></li>
+</ul>
+<h2>1. 平均绝对误差 MAE</h2>
+<p>另一种避免正负误差抵消的方法，是先取绝对值再平均：</p>
+<pre><code class="language-text">MAE = (|预测值1 - 实际值1| + … + |预测值n - 实际值n|) / n
+</code></pre>
+<p>MAE 的单位与目标相同。若预测重量以 kg 计，MAE 也以 kg 计。它是平均绝对误差，不是带正负号的平均误差。</p>
+<p><figure aria-label="MAE 与 MSE 对两个模型的比较"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="730" viewBox="0 0 1080 730"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="730" fill="#f3f6fb"/><text x="45" y="60" class="h">MAE 与 MSE：同一批预测，可能选出不同模型</text><text x="45" y="104" class="t">两个瓜实际都重 5 kg｜误差 = 预测 − 实际</text><rect x="40" y="135" width="1000" height="340" rx="16" fill="white"/><text x="65" y="185" class="t">比较项目</text><text x="430" y="185" class="h">模型 C</text><text x="770" y="185" class="h">模型 D</text><path d="M65 210H1015 M65 290H1015 M65 370H1015" stroke="#dce3ed"/><text x="65" y="255" class="t">预测重量</text><text x="430" y="255" class="t">3、7 kg</text><text x="770" y="255" class="t">5、8 kg</text><text x="65" y="335" class="t">误差</text><text x="430" y="335" class="t">−2、+2 kg</text><text x="770" y="335" class="t">0、+3 kg</text><text x="65" y="415" class="t">MAE：绝对值平均</text><text x="430" y="415" class="t">(2 + 2) / 2 = 2</text><text x="770" y="415" class="t">(0 + 3) / 2 = 1.5</text><rect x="40" y="495" width="1000" height="185" rx="16" fill="#e0f2eb"/><text x="65" y="540" class="h">MAE 认为 D 更好：平均绝对误差更小。</text><text x="65" y="585" class="t">MSE 会对误差先平方，大误差的影响增长更快。</text><text x="65" y="632" class="t">轮到你：分别计算 C、D 的 MSE，它会更偏好哪个？</text></svg></figure></p>
+<h2>2. 为什么可能选出不同模型</h2>
+<p>两个瓜实际都为 5 kg。C 预测 3、7 kg；D 预测 5、8 kg。</p>
+<ul>
+<li>C 的绝对误差是 2、2 kg，MAE = 2 kg。</li>
+<li>D 的绝对误差是 0、3 kg，MAE = 1.5 kg。</li>
+</ul>
+<p>按 MAE，D 更好。但平方会放大大误差的影响，所以 MSE 可能给出不同的选择。指标应结合任务对错误的代价来选，并非任何一个都永远更好。</p>
+<p>同一数据与单位下可比较模型的 MAE，也可比较 MSE；不要把 MAE 与 MSE 的数值大小直接比较，因为量纲不同。</p>
+<h2>3. 练习（待回答）</h2>
+<ol>
+<li>C 的 MSE 是多少？</li>
+<li>D 的 MSE 是多少？</li>
+<li>按 MSE 应选哪个？它与 MAE 的选择是否一致？</li>
+</ol></main></html>

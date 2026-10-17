@@ -52,3 +52,5 @@
 - [类别不平衡与 P-R 曲线](class-imbalance.md) · [HTML](class-imbalance.html)（2026-10-18）
 
 - [回归任务：MSE 与 RMSE](regression-mse.md) · [HTML](regression-mse.html)（2026-10-18）
+
+- [MAE 与 MSE 对比](mae-vs-mse.md) · [HTML](mae-vs-mse.html)（2026-10-18）
