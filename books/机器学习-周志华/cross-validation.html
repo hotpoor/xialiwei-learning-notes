@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>交叉验证 · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>评估稳定性与 5 折交叉验证</h1>
+<ul>
+<li>学习日期：2026-10-18</li>
+<li>状态：已讲解，练习待回答</li>
+<li><a href="cross-validation.html">HTML 图解版</a> · <a href="02-模型评估与选择.md">返回第二章</a></li>
+</ul>
+<h2>1. 一次领先不等于未来一定领先</h2>
+<p>A、B 在一次测试中分别达到 91%、90%，这个差异可能受样本数量、抽样组成和训练随机性影响。更多有代表性的数据、合理的重复评估与比较检验可帮助判断可靠性，但不能保证未来一定更好。</p>
+<h2>2. 交叉验证怎么做</h2>
+<p>这里采用“先保留最终测试集，在其余开发数据上交叉验证”的完整工作流程。将开发数据分为 5 份，依次轮流拿 1 份验证，另外 4 份训练，进行 5 轮。</p>
+<p><figure aria-label="5 折交叉验证示意图"><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="865" viewBox="0 0 1080 865"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="865" fill="#f3f6fb"/><text x="45" y="60" class="h">5 折交叉验证：轮流验证，再汇总结果</text><text x="45" y="105" class="t">先保留最终测试集；将开发数据分成 5 份，每轮用 4 份训练、1 份验证</text><rect x="40" y="135" width="1000" height="440" rx="16" fill="white"/><text x="240" y="180" class="t">第 1 份</text><text x="395" y="180" class="t">第 2 份</text><text x="550" y="180" class="t">第 3 份</text><text x="705" y="180" class="t">第 4 份</text><text x="860" y="180" class="t">第 5 份</text><text x="65" y="238" class="t">第 1 轮</text><rect x="220" y="205" width="135" height="48" rx="8" fill="#f6c68f"/><text x="287" y="237" text-anchor="middle" class="t">验证</text><rect x="375" y="205" width="135" height="48" rx="8" fill="#d7eee7"/><text x="442" y="237" text-anchor="middle" class="t">训练</text><rect x="530" y="205" width="135" height="48" rx="8" fill="#d7eee7"/><text x="597" y="237" text-anchor="middle" class="t">训练</text><rect x="685" y="205" width="135" height="48" rx="8" fill="#d7eee7"/><text x="752" y="237" text-anchor="middle" class="t">训练</text><rect x="840" y="205" width="135" height="48" rx="8" fill="#d7eee7"/><text x="907" y="237" text-anchor="middle" class="t">训练</text><text x="65" y="303" class="t">第 2 轮</text><rect x="220" y="270" width="135" height="48" rx="8" fill="#d7eee7"/><text x="287" y="302" text-anchor="middle" class="t">训练</text><rect x="375" y="270" width="135" height="48" rx="8" fill="#f6c68f"/><text x="442" y="302" text-anchor="middle" class="t">验证</text><rect x="530" y="270" width="135" height="48" rx="8" fill="#d7eee7"/><text x="597" y="302" text-anchor="middle" class="t">训练</text><rect x="685" y="270" width="135" height="48" rx="8" fill="#d7eee7"/><text x="752" y="302" text-anchor="middle" class="t">训练</text><rect x="840" y="270" width="135" height="48" rx="8" fill="#d7eee7"/><text x="907" y="302" text-anchor="middle" class="t">训练</text><text x="65" y="368" class="t">第 3 轮</text><rect x="220" y="335" width="135" height="48" rx="8" fill="#d7eee7"/><text x="287" y="367" text-anchor="middle" class="t">训练</text><rect x="375" y="335" width="135" height="48" rx="8" fill="#d7eee7"/><text x="442" y="367" text-anchor="middle" class="t">训练</text><rect x="530" y="335" width="135" height="48" rx="8" fill="#f6c68f"/><text x="597" y="367" text-anchor="middle" class="t">验证</text><rect x="685" y="335" width="135" height="48" rx="8" fill="#d7eee7"/><text x="752" y="367" text-anchor="middle" class="t">训练</text><rect x="840" y="335" width="135" height="48" rx="8" fill="#d7eee7"/><text x="907" y="367" text-anchor="middle" class="t">训练</text><text x="65" y="433" class="t">第 4 轮</text><rect x="220" y="400" width="135" height="48" rx="8" fill="#d7eee7"/><text x="287" y="432" text-anchor="middle" class="t">训练</text><rect x="375" y="400" width="135" height="48" rx="8" fill="#d7eee7"/><text x="442" y="432" text-anchor="middle" class="t">训练</text><rect x="530" y="400" width="135" height="48" rx="8" fill="#d7eee7"/><text x="597" y="432" text-anchor="middle" class="t">训练</text><rect x="685" y="400" width="135" height="48" rx="8" fill="#f6c68f"/><text x="752" y="432" text-anchor="middle" class="t">验证</text><rect x="840" y="400" width="135" height="48" rx="8" fill="#d7eee7"/><text x="907" y="432" text-anchor="middle" class="t">训练</text><text x="65" y="498" class="t">第 5 轮</text><rect x="220" y="465" width="135" height="48" rx="8" fill="#d7eee7"/><text x="287" y="497" text-anchor="middle" class="t">训练</text><rect x="375" y="465" width="135" height="48" rx="8" fill="#d7eee7"/><text x="442" y="497" text-anchor="middle" class="t">训练</text><rect x="530" y="465" width="135" height="48" rx="8" fill="#d7eee7"/><text x="597" y="497" text-anchor="middle" class="t">训练</text><rect x="685" y="465" width="135" height="48" rx="8" fill="#d7eee7"/><text x="752" y="497" text-anchor="middle" class="t">训练</text><rect x="840" y="465" width="135" height="48" rx="8" fill="#f6c68f"/><text x="907" y="497" text-anchor="middle" class="t">验证</text><rect x="40" y="600" width="1000" height="215" rx="16" fill="#e0f2eb"/><text x="65" y="645" class="h">每轮重新训练一个模型，不是同一个模型接着训练。</text><text x="65" y="690" class="t">每个样本：当 1 次验证数据、当 4 次训练数据。</text><text x="65" y="735" class="t">汇总 5 轮验证成绩；比较 A、B 时使用相同划分。</text><text x="65" y="780" class="sm">最终测试集不参与这些轮次，也不用来选参数；选定方案后再评估。</text></svg></figure></p>
+<ul>
+<li>每轮从头训练，不沿用上一轮已训练的模型。</li>
+<li>每个样本参与 1 次验证、4 次训练。</li>
+<li>可报告各折成绩与均值，观察波动；不要只挑最好的一轮。</li>
+<li>比较模型时采用相同的折划分，减少划分差异造成的干扰。</li>
+<li>选择模型与参数后，用全部开发数据重新训练最终模型，再评估保留的测试集。</li>
+</ul>
+<p>书中不同语境可能将每折留出数据称为测试部分；本笔记为避免与最终测试集混淆，称其为“验证折”。</p>
+<h2>3. 仍要遵守数据边界</h2>
+<ul>
+<li>每折的缺失值填补、标准化等都只在该折训练部分拟合，再应用到验证折。</li>
+<li>分类任务可用分层划分尽量保持类别比例，但还要满足对象、时间等约束。</li>
+<li>同一病人或同一西瓜的多张图片，应按对象分组划分。</li>
+<li>预测未来应使用遵循时间顺序的验证方法，不能直接套用随机 5 折。</li>
+<li>各折训练数据互有重叠，折成绩不等于独立重复实验；不能把它们直接当成独立样本套用所有检验。后续再学比较检验。</li>
+</ul>
+<h2>4. 小练习（待回答）</h2>
+<p>先保留独立的最终测试集，剩下 1,000 条开发数据，等分做 5 折交叉验证。</p>
+<ol>
+<li>每轮有多少条训练数据、多少条验证数据？</li>
+<li>总共需要训练几次？每条开发数据参与几次验证？</li>
+<li>最终测试集要不要加入这 5 轮？</li>
+</ol></main></html>
