@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAE 与 MSE · 西瓜书学习笔记</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>MAE 与 MSE：评价指标体现了什么偏好</h1>
 <ul>
 <li>学习日期：2026-10-18</li>
-<li>状态：已讲解，练习待回答</li>
+<li>状态：练习已答对（2026-10-18）</li>
 <li><a href="regression-mse.md">上一节：MSE 与 RMSE</a> · <a href="mae-vs-mse.html">HTML 图解版</a></li>
 </ul>
 <h2>1. 平均绝对误差 MAE</h2>
@@ -18,9 +18,20 @@
 </ul>
 <p>按 MAE，D 更好。但平方会放大大误差的影响，所以 MSE 可能给出不同的选择。指标应结合任务对错误的代价来选，并非任何一个都永远更好。</p>
 <p>同一数据与单位下可比较模型的 MAE，也可比较 MSE；不要把 MAE 与 MSE 的数值大小直接比较，因为量纲不同。</p>
-<h2>3. 练习（待回答）</h2>
+<h2>3. 练习（已答对）</h2>
 <ol>
 <li>C 的 MSE 是多少？</li>
 <li>D 的 MSE 是多少？</li>
 <li>按 MSE 应选哪个？它与 MAE 的选择是否一致？</li>
-</ol></main></html>
+</ol>
+<h3>学习者回答</h3>
+<p>C 的 MSE = (4 + 4) / 2 = 4 kg²；D 的 MSE = (0 + 9) / 2 = 4.5 kg²。按 MSE 选 C，与 MAE 选 D 不一致，因为 MSE 对大误差的惩罚更大。</p>
+<p>反馈：计算与解释全部正确。</p>
+<h2>4. 指标应与错误代价相匹配</h2>
+<ul>
+<li>若每多错 1 kg，成本基本增加相同金额，MAE 更贴近这种线性代价。</li>
+<li>若误差增大后损失增长得更快，MSE 可能更符合目标，但真实代价未必恰好为平方关系。</li>
+<li>不能仅凭某个指标常用，就认定它适合所有任务。</li>
+</ul>
+<h3>下一问（待回答）</h3>
+<p>物流估重任务规定：无论高估还是低估，每相差 1 kg 都产生 2 元成本。只有 MAE 和 MSE 可选时，哪个更直接对应平均成本？为什么？</p></main></html>
