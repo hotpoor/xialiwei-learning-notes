@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live AI · 目标与设备路线</title><style>body{margin:0;background:#f3f6fb;color:#20304b;font:17px/1.8 system-ui,"PingFang SC",sans-serif}main{max-width:1100px;margin:auto;padding:28px 20px 70px}h1{font-size:32px}h2{margin-top:42px}figure{margin:24px 0;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:650px}.line{white-space:pre-wrap;overflow-wrap:anywhere;min-height:12px}a{color:#087d69}@media print{body{background:white}main{padding:0}figure{break-inside:avoid}figure svg{min-width:0}}table{border-collapse:collapse;width:100%;background:white}th,td{border:1px solid #dce3ed;padding:12px;text-align:left}th{background:#e7edf5}pre{background:#e7edf5;padding:18px;overflow:auto}p,li{max-width:950px}</style><main><h1>实时 Live AI 视频编辑：目标、硬件与第一阶段路线</h1>
-<p>记录日期：2026-10-18。状态：可行性评估与路线整理；尚未部署、下载权重或实测。本文不是 Decart 内部架构的复现说明。</p>
+<p>记录日期：2026-10-18。状态：已通过SSH检查Windows/WSL2与GPU，隔离推理环境正在安装；尚未实测模型或摄像头。本文不是 Decart 内部架构的复现说明。</p>
 <p><a href="index.html">HTML 图解</a> · <a href="../../README.md">返回学习仓库</a></p>
 <h2>1. 已确认的目标与设备</h2>
 <ul>
@@ -100,7 +100,7 @@ Mac浏览器显示与交互
 <p><a href="https://arxiv.org/abs/2405.15757">StreamV2V论文</a>使用过去帧特征库处理流式视频一致性。</p>
 <p><a href="https://github.com/chenfengxu714/StreamDiffusionV2">StreamDiffusionV2官方代码</a>提供1.3B、14B相关配置和在线demo；本项目优先检查小模型而不是直接选择14B。项目页的多卡H100成绩不能当作单张3090、Spark或M1的成绩。<a href="https://streamdiffusionv2.github.io/">V2项目页</a></p>
 <h2>6. 第一阶段验收</h2>
-<p>先以约512级低分辨率、单路摄像头、风格变换为起点；它是建议试验设置，不是最终规格或已确认性能。</p>
+<p>用户已接受先200×200展示、单路摄像头风格变换。实际推理尺寸计划比较256级低分辨率实验与512级参考，再缩放显示；兼容性、画质和速度待测。</p>
 <ul>
 <li>能加载模型并完成单帧变换；再接连续视频。</li>
 <li>提示词改变时，能看到输出变化，动作仍可辨认。</li>
@@ -114,4 +114,7 @@ Mac浏览器显示与交互
 <p>先发现具体失败点，再决定训练目标。风格/角色的图像LoRA可作为较小的第一步，但它不自动解决时序闪烁、长期一致性或推理速度。视频微调、蒸馏与因果缓存需分别研究，不能承诺所有方法均在24GB显存下可训练。</p>
 <p>学习主线改为：张量和神经网络直觉 → 图像扩散与条件控制 → 视频时序一致性 → 流式推理/缓存/队列 → 数据与小范围训练 → 任务评估。西瓜书保留作泛化、数据边界、优化与评价的基础参考，不要求先学完整本书或熟练手算指标。</p>
 <h2>8. 下一步</h2>
-<p>先检查3090主机的Windows版本、WSL2、GPU驱动、CUDA可见性、RAM与空闲磁盘，再冻结具体模型和依赖版本。本轮仅完成资料核对与路线记录；尚未连接该机器，不虚构检查结果。</p></main></html>
+<p>已通过保存的SSH连接检查Windows/WSL2，确认WSL内可识别3090。独立venv已创建，PyTorch及图像推理依赖安装中。下一步验证CUDA矩阵计算、下载已固定版本的模型并做256×256合成图推理，然后才验收摄像头。</p>
+<h2>第一版已启动</h2>
+<p><a href="setup/README.md">第1步：检查Windows/WSL2主机</a> · <a href="setup/index.html">HTML图解</a></p>
+<p>已通过保存的SSH连接完成主机检查，正在独立venv内安装环境。详见搭建记录。</p></main></html>

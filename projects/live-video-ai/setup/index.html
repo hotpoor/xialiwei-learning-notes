@@ -4,13 +4,13 @@
 <ul>
 <li>使用现有3090，Windows主机、WSL2推理环境。</li>
 <li>摄像头实时输入，按提示词做风格转换；先不训练基础模型。</li>
-<li>用户接受200×200像素画面。展示尺寸先定200×200；实际推理尺寸与展示尺寸分别记录。</li>
+<li>用户最初接受200×200画面，随后确认先按256×256推进；实际推理尺寸与展示尺寸分别记录。</li>
 <li>建议比较256×256推理（低分辨率实验）与512×512推理（SD-Turbo模型卡推荐参考），最后缩放为200×200显示。256是否可用、画质与速度仍需在实际机器测试，不能只把512输出缩小就宣称推理更快。</li>
 <li>不强行把内部推理尺寸设成200×200；尺寸需要适合选定模型与加速后端。不能仅凭200可被8整除就断言整条网络和加速引擎兼容。</li>
 <li>第一轮优先同一台Windows机器的浏览器localhost与摄像头跑通，减少跨机器网络与摄像头访问变量；之后再接Mac摄像头。摄像头接在哪台机器尚待执行阶段确认，不能当作已有事实。</li>
 </ul>
 <p>SD-Turbo支持少步推理，其官方模型卡偏好512×512。较低分辨率可能牺牲语义与人物质量，需实际对比。<a href="https://huggingface.co/stabilityai/sd-turbo">官方模型卡</a></p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="510" viewBox="0 0 1080 510"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="510" fill="#f3f6fb"/><text x="40" y="55" class="h">200 × 200 可以先作为展示目标</text><rect x="40" y="90" width="1000" height="155" rx="16" fill="white"/><text x="65" y="135" class="t">摄像头 → 裁剪/缩放 → 模型推理 → 200 × 200 显示</text><text x="65" y="180" class="sm">推理尺寸：256 × 256 实验 / 512 × 512 参考，需要实际比较</text><text x="65" y="218" class="sm">显示缩小不等于推理加速；本机真实帧率尚未测得。</text><rect x="40" y="270" width="1000" height="190" rx="16" fill="#e0f2eb"/><text x="65" y="315" class="h">当前只做第 1 步：检查Windows主机</text><text x="65" y="360" class="t">Windows版本 · NVIDIA驱动 · WSL版本 · 发行版是否为WSL2</text><text x="65" y="407" class="sm">检查结果返回后 → 验证GPU → 隔离环境 → 单帧 → 摄像头连续输出</text></svg></p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1080" height="510" viewBox="0 0 1080 510"><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#20304b}.h{font-size:27px;font-weight:700}.t{font-size:22px}.sm{font-size:19px}</style><rect width="1080" height="510" fill="#f3f6fb"/><text x="40" y="55" class="h">第一版按 256 × 256 推进</text><rect x="40" y="90" width="1000" height="155" rx="16" fill="white"/><text x="65" y="135" class="t">摄像头 → 裁剪/缩放 → 模型推理 → 256 × 256 显示</text><text x="65" y="180" class="sm">推理尺寸：256 × 256 实验 / 512 × 512 参考，需要实际比较</text><text x="65" y="218" class="sm">显示缩小不等于推理加速；本机真实帧率尚未测得。</text><rect x="40" y="270" width="1000" height="190" rx="16" fill="#e0f2eb"/><text x="65" y="315" class="h">已通过 SSH 检查主机，正在安装推理环境</text><text x="65" y="360" class="t">Windows版本 · NVIDIA驱动 · WSL版本 · 发行版是否为WSL2</text><text x="65" y="407" class="sm">检查结果返回后 → 验证GPU → 隔离环境 → 单帧 → 摄像头连续输出</text></svg></p>
 <h2>当前进度</h2>
 <table>
 <thead>
@@ -29,17 +29,17 @@
 <tr>
 <td>1</td>
 <td>检查Windows、驱动、WSL2、RAM与磁盘</td>
-<td>已提供命令，等待用户在3090主机执行</td>
+<td>已通过保存的SSH连接完成</td>
 </tr>
 <tr>
 <td>2</td>
 <td>验证WSL2中的GPU访问</td>
-<td>待步骤1结果</td>
+<td>WSL内nvidia-smi已通过，PyTorch计算待安装后验证</td>
 </tr>
 <tr>
 <td>3</td>
 <td>建立隔离Python环境并固定依赖版本</td>
-<td>待GPU验证</td>
+<td>独立venv已创建，依赖安装中</td>
 </tr>
 <tr>
 <td>4</td>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 <td>5</td>
-<td>浏览器摄像头连续输入与200×200展示</td>
+<td>浏览器摄像头连续输入与256×256展示</td>
 <td>未执行</td>
 </tr>
 <tr>
@@ -64,7 +64,7 @@
 </tbody>
 </table>
 <h2>第1步：只检查，不安装</h2>
-<p>当前聊天可操作的本地工作区在Mac上，尚未获得3090主机的连接信息，因此不能声称已在Windows或WSL中执行检查。</p>
+<p>最初从Mac工作区提供手工检查命令；随后找到已保存的3090连接，已通过SSH完成Windows与WSL只读检查。下面命令保留作复现参考，无需用户重复执行。</p>
 <p>在3090那台电脑打开普通PowerShell，依次执行下面四条命令，复制输出回聊天。诊断失败或提示某命令不存在，也请保留原样；先不按网上教程混装CUDA或驱动。</p>
 <pre><code class="language-powershell">Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, BuildNumber
 nvidia-smi --query-gpu=name,driver_version,memory.total,memory.free --format=csv
@@ -92,4 +92,77 @@ wsl --list --verbose
 <li>已准备本操作指南与只读PowerShell脚本。</li>
 <li>Windows版本、驱动版本、WSL发行版和GPU访问结果：待返回。</li>
 <li>未安装环境、未下载权重、未启动摄像头、无FPS或延迟实测。</li>
-</ul></main></html>
+</ul>
+<h2>SSH实测记录 · 2026-10-18</h2>
+<p>通过本机已有连接记录登录，沿用主机密钥校验；本仓库不保存SSH地址、账号或密码。</p>
+<table>
+<thead>
+<tr>
+<th>检查</th>
+<th>实测结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td>Windows 11 专业版，Build 26200</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>NVIDIA GeForce RTX 3090，24576 MiB</td>
+</tr>
+<tr>
+<td>NVIDIA驱动</td>
+<td>610.88</td>
+</tr>
+<tr>
+<td>检查时空闲显存</td>
+<td>20105～20106 MiB；瞬时值，不是保留额度</td>
+</tr>
+<tr>
+<td>Windows内存</td>
+<td>63.9 GiB左右（系统报告折算）</td>
+</tr>
+<tr>
+<td>WSL</td>
+<td>3.0.3.0；发行版 AI3D，VERSION 2，运行中</td>
+</tr>
+<tr>
+<td>WSL系统</td>
+<td>Ubuntu 22.04.5 LTS</td>
+</tr>
+<tr>
+<td>WSL内GPU</td>
+<td>nvidia-smi正常识别3090与驱动</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.10.12；默认解释器未安装torch/diffusers</td>
+</tr>
+<tr>
+<td>WSL文件系统空闲</td>
+<td>检查时约824G</td>
+</tr>
+<tr>
+<td>本项目目录</td>
+<td>WSL的 /root/liveai-style-v1</td>
+</tr>
+<tr>
+<td>隔离环境</td>
+<td>/root/liveai-style-v1/.venv 已创建</td>
+</tr>
+</tbody>
+</table>
+<p>为本项目独立安装PyTorch及图像推理依赖，未向系统Python安装这些包，也未修改已有项目的环境。此时安装任务已启动，完成与CUDA矩阵运算结果待后续追加，不能把nvidia-smi成功当作PyTorch已验证。</p>
+<p>用户不再需要手动粘贴第一轮检查结果。后续先验证PyTorch CUDA，再测试单帧风格转换。</p>
+<h3>代码与模型源准备</h3>
+<ul>
+<li>已准备<a href="../app/README.md">本地图像流基线代码</a>，使用SD-Turbo + Diffusers，暂不引入TensorRT和复杂的上游演示依赖。</li>
+<li>为先排除基础环境问题，先验证标准PyTorch单帧路径；后续再对比StreamDiffusion等流式加速，不声称当前代码已获得其性能。</li>
+<li>官方模型API可达，修订号已固定为 <code>b261bac6fd2cf515557d5d0707481eafa0485ec2</code>。</li>
+<li>操作页一次只发送一帧；同一时间不积压摄像头帧。不保存真人画面。</li>
+<li>代码已进行Python/JavaScript语法检查；GPU模型与摄像头联调仍待执行。</li>
+</ul>
+<h3>当前安装任务</h3>
+<p>依赖安装运行在已保持连接的SSH会话内，日志位于WSL项目目录的 <code>install.log</code>。已下载部分CUDA组件，整体安装仍在进行中；尚未取得PyTorch计算通过结果。后续继续从此处检查日志，不重复建立环境。后台启动方式在SSH退出后未继续执行，已改为保持SSH连接的前台安装；没有把首次启动当作安装成功。</p>
+<p><a href="../app/index.html">操作页源码</a>目前只完成界面检查，未连接模型时显示服务未连接并禁用摄像头启动；不展示伪造帧率。</p></main></html>
